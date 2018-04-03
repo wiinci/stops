@@ -33,7 +33,7 @@ export default {
     },
     data() {
         return {
-            searchRadius: 0.2,
+            searchRadius: 0.21,
             stations: [],
             stationsNearby: [],
             position: {
@@ -58,49 +58,36 @@ export default {
     },
     created() {
         this.getPosition()
-            .then(user => {
-                console.log(user);
-                this.position.lat = user.lat;
-                this.position.lon = user.lon;
+            .then(position => {
+                console.log(position);
+                this.position.lat = position.coords.latitude;
+                this.position.lon = position.coords.longitude;
 
                 // http://www.arubin.org/files/geo_search.pdf
                 // Create a search area with center as user's position coordinates
                 // and radius equal to search radius within a bounding rectangle
                 // defined by latitudes and longitudes around the user's position
-                this.position.lowerBoundLatitude = user.lat - this.searchRadius / 69;
-                this.position.upperBoundLatitude = user.lat + this.searchRadius / 69;
-                this.position.lowerBoundLongitude = user.lon - this.searchRadius / Math.abs(Math.cos(Math.PI / 180 * user.lat) * 69);
-                this.position.upperBoundLongitude = user.lon + this.searchRadius / Math.abs(Math.cos(Math.PI / 180 * user.lat) * 69);
+                this.position.lowerBoundLatitude = position.coords.latitude - this.searchRadius / 69;
+                this.position.upperBoundLatitude = position.coords.latitude + this.searchRadius / 69;
+                this.position.lowerBoundLongitude = position.coords.longitude - this.searchRadius / Math.abs(Math.cos(Math.PI / 180 * position.coords.latitude) * 69);
+                this.position.upperBoundLongitude = position.coords.longitude + this.searchRadius / Math.abs(Math.cos(Math.PI / 180 * position.coords.latitude) * 69);
             }).catch(error => {
-                throw error;
+                throw error.message;
             });
     },
     methods: {
         getPosition() {
-            return new Promise(function (resolve, reject) {
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 9000,
+                maximumAge: 0
+            };
+
+            return new Promise((resolve, reject) => {
                 if (!navigator.geolocation) {
                     reject("Geolocation is not supported in your browser.");
                 } else {
-                    navigator.geolocation.getCurrentPosition(
-                        // success
-                        position => {
-                            resolve({
-                                lat: position.coords.latitude,
-                                lon: position.coords.longitude
-                            });
-                        },
-
-                        // error
-                        error => {
-                            reject(`${error.message} [error code: ${error.code}]`);
-                        },
-
-                        // options
-                        {
-                            enableHighAccuracy: true,
-                            timeout: 10000
-                        }
-                    );
+                    navigator.geolocation.getCurrentPosition(resolve, reject, options);
                 }
             });
         },
@@ -130,7 +117,8 @@ export default {
                         stop_id: station[0],
                         stop_name: station[2],
                         stop_lat: station[3],
-                        stop_lon: station[4]
+                        stop_lon: station[4],
+                        stop_dist: this.stopDistance(station[3], station[4])
                     });
                 }
                 return filteredStations;
@@ -138,7 +126,11 @@ export default {
         },
 
         withinReach(lat, lon) {
-            return (3956 * 2 * Math.asin(Math.sqrt(Math.sin((this.position.lat - Math.abs(lat)) * Math.PI / 180 / 2) ** 2 + Math.cos(this.position.lat * Math.PI / 180) * Math.cos(Math.abs(lat) * Math.PI / 180) * Math.sin((this.position.lon - lon) * Math.PI / 180 / 2) ** 2)) <= this.searchRadius);
+            return (this.stopDistance(lat, lon) <= this.searchRadius);
+        },
+
+        stopDistance(lat, lon) {
+            return +(3956 * 2 * Math.asin(Math.sqrt(Math.sin((this.position.lat - Math.abs(lat)) * Math.PI / 180 / 2) ** 2 + Math.cos(this.position.lat * Math.PI / 180) * Math.cos(Math.abs(lat) * Math.PI / 180) * Math.sin((this.position.lon - lon) * Math.PI / 180 / 2) ** 2))).toFixed(2);
         }
     }
 };
