@@ -30,10 +30,12 @@ module.exports = {
         "indent": ["warn", 4],
         "max-len": "off",
         "no-console": "off",
+        "no-mixed-operators": "off",
         "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
         "no-undef": ["warn"],
         "no-underscore-dangle": "off",
         "object-curly-spacing": ["warn", "always"],
+        "prefer-arrow-callback": "off",
         "quote-props": ["error", "consistent-as-needed"],
         "quotes": ["warn", "double", { avoidEscape: true }],
 
