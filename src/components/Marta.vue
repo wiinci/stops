@@ -12,7 +12,8 @@
                 v-for="stop in stopsNearby"
                 :key="stop.stop_id"
             >
-                {{ stop.stop_name }}
+                {{ stop.stop_name }}<br>
+                {{ stop.departure_time }}
             </li>
         </ul>
         <Bus/>
@@ -27,10 +28,12 @@ import Train from "@/components/Train";
 
 export default {
     name: "Marta",
+
     components: {
         Bus,
         Train
     },
+
     data() {
         return {
             searchRadius: 0.21,
@@ -46,11 +49,14 @@ export default {
             }
         };
     },
+
     created() {
         this.getPosition()
             .then(this.getStops)
-            .then(this.getStopsInsideSearchRadius);
+            .then(this.getStopsInsideSearchRadius)
+            .then(this.getDepartureTimes);
     },
+
     methods: {
         getPosition() {
             const options = {
@@ -87,24 +93,10 @@ export default {
             this.position.upperBoundLatitude = coords[0] + this.searchRadius / 69;
             this.position.lowerBoundLongitude = coords[1] - this.searchRadius / Math.abs(Math.cos(Math.PI / 180 * coords[0]) * 69);
             this.position.upperBoundLongitude = coords[1] + this.searchRadius / Math.abs(Math.cos(Math.PI / 180 * coords[0]) * 69);
-            console.log(coords, this.position);
 
             const query = `select * from stops where stop_lon between ${this.position.lowerBoundLongitude} and ${this.position.upperBoundLongitude} and stop_lat between ${this.position.lowerBoundLatitude} and ${this.position.upperBoundLatitude} order by stop_lat`;
 
-            return new Promise((resolve, reject) => {
-                axios.get("/api", {
-                    params: {
-                        sql: query
-                    }
-                }).then(response => {
-                    console.log(response);
-                    if (response.status === 200) {
-                        resolve(response.data.rows);
-                    }
-                }).catch(error => {
-                    reject(error);
-                });
-            });
+            return this.fetchQuery(query);
         },
 
         getStopsInsideSearchRadius(stops) {
@@ -122,6 +114,37 @@ export default {
                 }
                 return filteredStops;
             }, []);
+            return Promise.all(this.stopsNearby);
+        },
+
+        getDepartureTimes(stops) {
+            stops.map((stop, index) => {
+                const query = `select * from stop_times where stop_id = ${stop.stop_id} and departure_time > strftime("%H:%M:%S","now", "localtime") order by departure_time limit 1`;
+
+                this.fetchQuery(query)
+                    .then(result => {
+                        this.$set(this.stopsNearby[index], "departure_time", result[0][2]);
+                    });
+
+                return stop;
+            });
+        },
+
+        fetchQuery(query) {
+            return new Promise((resolve, reject) => {
+                axios.get("/api", {
+                    params: {
+                        sql: query
+                    }
+                }).then(response => {
+                    if (response.status === 200) {
+                        console.log(response.data.rows);
+                        resolve(response.data.rows);
+                    }
+                }).catch(error => {
+                    reject(error);
+                });
+            });
         },
 
         isInsideSearchRadius(lat, lon) {
