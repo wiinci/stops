@@ -1,38 +1,71 @@
 <template>
     <main>
-        <h1>Marta</h1>
-        <h2 v-show="position.longitude !== 0">{{ position.longitude }}</h2>
-        <h2 v-show="position.latitude !== 0">{{ position.latitude }}</h2>
-        <h2 v-show="position.lowerBoundLatitude !== 0">{{ position.lowerBoundLatitude }}</h2>
-        <h2 v-show="position.lowerBoundLongitude !== 0">{{ position.lowerBoundLongitude }}</h2>
-        <h2 v-show="position.upperBoundLatitude !== 0">{{ position.upperBoundLatitude }}</h2>
-        <h2 v-show="position.upperBoundLongitude !== 0">{{ position.upperBoundLongitude }}</h2>
-        <ul v-show="stopsNearby.length">
-            <li
+        <template>
+            <article
                 v-for="stop in stopsNearby"
                 :key="stop.stop_id"
             >
-                {{ stop.stop_name }}<br>
-                {{ stop.departure_time }}
-            </li>
-        </ul>
-        <Bus/>
-        <Train/>
+                <h1>
+                    <span class="major-st">{{ stop.stop_name[0] }} &amp;</span>
+                    <span class="minor-st">{{ stop.stop_name[1] }}</span>
+                </h1>
+                <section class="slat">
+                    <p class="stop area1">
+                        <span
+                            id="route"
+                            class="caption"
+                        >
+                            Route
+                        </span>
+
+                        <span
+                            class="body"
+                            aria-describedby="route"
+                        >
+                            {{ stop.route_number }}
+                        </span>
+                    </p>
+                    <p class="stop area2">
+                        <span
+                            id="headsign"
+                            class="caption"
+                        >
+                            To
+                        </span>
+
+                        <span
+                            class="body"
+                            aria-describedby="headsign"
+                        >
+                            {{ stop.trip_headsign }}
+                        </span>
+                    </p>
+                    <p class="stop area3">
+                        <span
+                            id="arriving"
+                            class="caption"
+                        >
+                            <time :datetime="$moment('09:05', 'hh:mm').format()">Arriving @ {{ $moment(stop.arrival_time, "HH:mm:ss").format("hh:mm A") }}</time>
+                        </span>
+
+                        <span
+                            class="body"
+                            aria-describedby="arriving"
+                        >
+                            <time :datetime="$moment('09:05', 'hh:mm').format()">{{ $moment(stop.arrival_time, "HH:mm:ss").fromNow(true) }}</time>
+                        </span>
+                    </p>
+                </section>
+            </article>
+        </template>
     </main>
 </template>
 
 <script>
 import axios from "axios";
-import Bus from "@/components/Bus";
-import Train from "@/components/Train";
 
 export default {
     name: "Marta",
-
-    components: {
-        Bus,
-        Train
-    },
 
     data() {
         return {
@@ -51,10 +84,15 @@ export default {
     },
 
     created() {
-        this.getPosition()
-            .then(this.getStops)
-            .then(this.getStopsInsideSearchRadius)
-            .then(this.getDepartureTimes);
+        const stops = [{ stop_id: 106190, stop_name: "GLENWOOD AVE SE@PARKER AVE", stop_lat: 33.739791, stop_lon: -84.300463, stop_dist: 0.21 },
+            { stop_id: 106186, stop_name: "GLENWOOD AVE SE@CARTER AVE SE", stop_lat: 33.73989, stop_lon: -84.304919, stop_dist: 0.17 },
+            { stop_id: 106188, stop_name: "GLENWOOD AVE SE@CARTER AVE SE", stop_lat: 33.740093, stop_lon: -84.305435, stop_dist: 0.2 }];
+        this.stopsNearby = stops;
+        this.getArrivalTimes(stops);
+        // this.getPosition();
+        // .then(this.getStops)
+        // .then(this.getStopsInsideSearchRadius)
+        // .then(this.getArrivalTimes);
     },
 
     methods: {
@@ -82,7 +120,7 @@ export default {
             });
         },
 
-        getStops(coords) {
+        async getStops(coords) {
             // http://www.arubin.org/files/geo_search.pdf
             // Create a search area with center as user's position coordinates
             // and radius equal to search radius within a bounding rectangle
@@ -94,19 +132,23 @@ export default {
             this.position.lowerBoundLongitude = coords[1] - this.searchRadius / Math.abs(Math.cos(Math.PI / 180 * coords[0]) * 69);
             this.position.upperBoundLongitude = coords[1] + this.searchRadius / Math.abs(Math.cos(Math.PI / 180 * coords[0]) * 69);
 
-            const query = `select * from stops where stop_lon between ${this.position.lowerBoundLongitude} and ${this.position.upperBoundLongitude} and stop_lat between ${this.position.lowerBoundLatitude} and ${this.position.upperBoundLatitude} order by stop_lat`;
+            const query = `select *
+                from stops
+                where stop_lon between ${this.position.lowerBoundLongitude} and ${this.position.upperBoundLongitude} and stop_lat between ${this.position.lowerBoundLatitude} and ${this.position.upperBoundLatitude}
+                order by stop_lat`;
 
-            return this.fetchQuery(query);
+            const res = await this.fetchQuery(query);
+            return res;
         },
 
-        getStopsInsideSearchRadius(stops) {
+        async getStopsInsideSearchRadius(stops) {
             this.stops = stops;
             this.stopsNearby = stops.reduce((filteredStops, stop) => {
                 const isNear = this.isInsideSearchRadius(stop[3], stop[4]);
                 if (isNear) {
                     filteredStops.push({
                         stop_id: stop[0],
-                        stop_name: stop[2],
+                        stop_name: this.stopName(stop[2]),
                         stop_lat: stop[3],
                         stop_lon: stop[4],
                         stop_dist: this.stopDistance(stop[3], stop[4])
@@ -114,16 +156,29 @@ export default {
                 }
                 return filteredStops;
             }, []);
-            return Promise.all(this.stopsNearby);
+            const res = await Promise.all(this.stopsNearby);
+            return res;
         },
 
-        getDepartureTimes(stops) {
+        getArrivalTimes(stops) {
             stops.map((stop, index) => {
-                const query = `select * from stop_times where stop_id = ${stop.stop_id} and departure_time > strftime("%H:%M:%S","now", "localtime") order by departure_time limit 1`;
+                const query = `select distinct stop_times.stop_id, stop_times.arrival_time, stops.stop_name, stops.stop_lat, stops.stop_lon, trips.trip_headsign, routes.route_short_name, routes.route_long_name, routes.route_type
+                    from stop_times
+                    natural join stops
+                    natural join trips
+                    natural join routes
+                    where stop_times.stop_id = ${stop.stop_id}
+                    and stop_times.arrival_time > strftime('%H:%M:%S', 'now', 'localtime')
+                    order by stop_times.arrival_time
+                    limit 1`;
 
                 this.fetchQuery(query)
                     .then(result => {
-                        this.$set(this.stopsNearby[index], "departure_time", result[0][2]);
+                        this.$set(this.stopsNearby[index], "arrival_time", result[0][1]);
+                        this.$set(this.stopsNearby[index], "stop_name", this.stopName(result[0][2]));
+                        this.$set(this.stopsNearby[index], "trip_headsign", this.headSign(result[0][5]));
+                        this.$set(this.stopsNearby[index], "route_number", result[0][6]);
+                        this.$set(this.stopsNearby[index], "route_type", result[0][8]);
                     });
 
                 return stop;
@@ -131,10 +186,11 @@ export default {
         },
 
         fetchQuery(query) {
+            const q = query.replace(/\s\s+/g, " ");
             return new Promise((resolve, reject) => {
                 axios.get("/api", {
                     params: {
-                        sql: query
+                        sql: q
                     }
                 }).then(response => {
                     if (response.status === 200) {
@@ -153,8 +209,106 @@ export default {
 
         stopDistance(lat, lon) {
             return +(3956 * 2 * Math.asin(Math.sqrt(Math.sin((this.position.latitude - Math.abs(lat)) * Math.PI / 180 / 2) ** 2 + Math.cos(this.position.latitude * Math.PI / 180) * Math.cos(Math.abs(lat) * Math.PI / 180) * Math.sin((this.position.longitude - lon) * Math.PI / 180 / 2) ** 2))).toFixed(2);
+        },
+
+        headSign(sign) {
+            return sign.split(" ").splice(2).filter(str => str !== "-").join(" ");
+        },
+
+        stopName(name) {
+            return name.split(/[@-]/).map(n => n.trim());
         }
-    }
+    },
 };
 </script>
+
+<style lang="less" scoped>
+@base-unit: 0.4rem;
+.line-height(@fs, @lh: 1.3, @r: 0.4rem) {
+    line-height: ceil((@fs * @lh) / @r) * @r;
+}
+
+.major-st {
+    font-size: 2.6rem;
+    font-weight: 300;
+    .line-height(2.6rem);
+}
+.minor-st {
+    font-size: 4.2rem;
+    font-weight: 800;
+    .line-height(4.2rem);
+    margin-top: -(@base-unit * 3);
+}
+.caption {
+    font-size: 1.6rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    .line-height(1.6rem);
+}
+.body {
+    font-size: 2.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    .line-height(2.6rem);
+    margin-top: -@base-unit;
+    font-feature-settings: "tnum";
+}
+section {
+    list-style: none;
+    list-style-position: outside;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-areas:
+        "area1"
+        "area2"
+        "area3";
+    grid-template-columns: auto 1.6fr 1fr;
+    grid-column-gap: (@base-unit * 4);
+
+    &:last-child {
+        border-bottom: 4px solid;
+    }
+
+    + section {
+        padding-top: (@base-unit * 2);
+        margin-top: @base-unit;
+        border-top: 1px solid;
+    }
+
+    @media only screen and (min-width: 501px)  {
+        grid-template-areas: "area1 area2 area3";
+    }
+}
+article {
+    + article {
+        margin-top: (@base-unit * 9);
+    }
+}
+.stop {
+    + .stop {
+        margin-top: (@base-unit * 1);
+    }
+    @media only screen and (min-width: 501px)  {
+        + .stop {
+            margin-top: 0
+        }
+    }
+}
+.area1 { grid-area: area1; }
+.area2 { grid-area: area2; }
+.area3 {
+    grid-area: area3;
+    @media only screen and (min-width: 501px)  {
+        text-align: right;
+    }
+}
+span {
+    display: block;
+}
+h1 {
+    margin-bottom: (@base-unit * 2);
+    border-bottom: 1px solid;
+}
+</style>
 

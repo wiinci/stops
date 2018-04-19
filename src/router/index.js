@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Marta from "@/components/Marta";
 
 Vue.use(Router);
 
@@ -9,7 +8,17 @@ export default new Router({
         {
             path: "/",
             name: "Marta",
-            component: Marta,
+            component: () => import("@/components/Marta"),
+        },
+        {
+            path: "/bus/:route",
+            name: "Bus",
+            component: () => import("@/components/Bus"),
+        },
+        {
+            path: "/train/:line",
+            name: "Train",
+            component: () => import("@/components/Train"),
         },
     ],
 });
