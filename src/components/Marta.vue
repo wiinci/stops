@@ -6,46 +6,30 @@
                 :key="stop.stop_id"
             >
                 <h1>
-                    <span class="major-st">{{ stop.stop_name[0] }} &amp;</span>
-                    <span class="minor-st">{{ stop.stop_name[1] }}</span>
+                    <div
+                        class="major-st"
+                        aria-describedby="route"
+                    >
+                        {{ stop.route_number }}
+                    </div>
+                    <div
+                        class="minor-st"
+                        aria-describedby="headsign"
+                    >
+                        {{ stop.trip_headsign }}
+                    </div>
                 </h1>
                 <section class="slat">
                     <p class="stop area1">
-                        <span
-                            id="route"
-                            class="caption"
-                        >
-                            Route
-                        </span>
-
-                        <span
-                            class="body"
-                            aria-describedby="route"
-                        >
-                            {{ stop.route_number }}
-                        </span>
+                        <span class="caption">{{ stop.stop_name[0] }} &amp;</span>
+                        <span class="body">{{ stop.stop_name[1] }}</span>
                     </p>
                     <p class="stop area2">
-                        <span
-                            id="headsign"
-                            class="caption"
-                        >
-                            To
-                        </span>
-
-                        <span
-                            class="body"
-                            aria-describedby="headsign"
-                        >
-                            {{ stop.trip_headsign }}
-                        </span>
-                    </p>
-                    <p class="stop area3">
                         <span
                             id="arriving"
                             class="caption"
                         >
-                            <time :datetime="$moment('09:05', 'hh:mm').format()">Arriving @ {{ $moment(stop.arrival_time, "HH:mm:ss").format("hh:mm A") }}</time>
+                            <time :datetime="$moment('09:05', 'hh:mm').format()">Arriving @ {{ $moment(stop.arrival_time, "HH:mm:ss").format("hh:mm A") }} in</time>
                         </span>
 
                         <span
@@ -89,10 +73,12 @@ export default {
             { stop_id: 106188, stop_name: "GLENWOOD AVE SE@CARTER AVE SE", stop_lat: 33.740093, stop_lon: -84.305435, stop_dist: 0.2 }];
         this.stopsNearby = stops;
         this.getArrivalTimes(stops);
-        // this.getPosition();
-        // .then(this.getStops)
-        // .then(this.getStopsInsideSearchRadius)
-        // .then(this.getArrivalTimes);
+        console.log(process.env.NODE_ENV);
+
+        // this.getPosition()
+        //     .then(this.getStops)
+        //     .then(this.getStopsInsideSearchRadius)
+        //     .then(this.getArrivalTimes);
     },
 
     methods: {
@@ -160,8 +146,8 @@ export default {
             return res;
         },
 
-        getArrivalTimes(stops) {
-            stops.map((stop, index) => {
+        async getArrivalTimes(stops) {
+            await stops.map((stop, index) => {
                 const query = `select distinct stop_times.stop_id, stop_times.arrival_time, stops.stop_name, stops.stop_lat, stops.stop_lon, trips.trip_headsign, routes.route_short_name, routes.route_long_name, routes.route_type
                     from stop_times
                     natural join stops
@@ -224,91 +210,104 @@ export default {
 
 <style lang="less" scoped>
 @base-unit: 0.4rem;
-.line-height(@fs, @lh: 1.3, @r: 0.4rem) {
-    line-height: ceil((@fs * @lh) / @r) * @r;
+.line-height(@fs, @lh: 1, @r: 0.4rem) {
+  line-height: ceil((@fs * @lh) / @r) * @r;
 }
 
 .major-st {
-    font-size: 2.6rem;
-    font-weight: 300;
-    .line-height(2.6rem);
+  font-size: 2.6rem;
+  font-weight: 800;
+  .line-height(2.6rem);
+  text-align: center;
+  background: red;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 6rem;
+  height: 6rem;
 }
 .minor-st {
+  font-size: 3.4rem;
+  font-weight: 800;
+  .line-height(3.4rem);
+
+  @media only screen and (min-width: 501px) {
     font-size: 4.2rem;
-    font-weight: 800;
     .line-height(4.2rem);
-    margin-top: -(@base-unit * 3);
+  }
 }
 .caption {
-    font-size: 1.6rem;
-    font-weight: 400;
-    text-transform: uppercase;
-    .line-height(1.6rem);
+  font-size: 1.6rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  .line-height(1.6rem);
 }
 .body {
-    font-size: 2.6rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    .line-height(2.6rem);
-    margin-top: -@base-unit;
-    font-feature-settings: "tnum";
+  font-size: 2.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  .line-height(2.6rem);
 }
 section {
-    list-style: none;
-    list-style-position: outside;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-areas:
-        "area1"
-        "area2"
-        "area3";
-    grid-template-columns: auto 1.6fr 1fr;
-    grid-column-gap: (@base-unit * 4);
+  list-style: none;
+  list-style-position: outside;
+  margin: 0;
+  padding: 0.8rem 0;
+  display: grid;
+  grid-template-areas:
+    "area1"
+    "area2";
+  grid-column-gap: (@base-unit * 4);
 
-    &:last-child {
-        border-bottom: 4px solid;
-    }
+  &:last-child {
+    border-bottom: 2px solid;
+  }
 
-    + section {
-        padding-top: (@base-unit * 2);
-        margin-top: @base-unit;
-        border-top: 1px solid;
-    }
+  + section {
+    padding-top: (@base-unit * 2);
+    margin-top: @base-unit;
+    border-top: 1px solid;
+  }
 
-    @media only screen and (min-width: 501px)  {
-        grid-template-areas: "area1 area2 area3";
-    }
+  @media only screen and (min-width: 501px) {
+    grid-template-areas: "area1 area2";
+  }
 }
 article {
-    + article {
-        margin-top: (@base-unit * 9);
-    }
+  + article {
+    margin-top: (@base-unit * 13);
+  }
 }
 .stop {
+  + .stop {
+    margin-top: (@base-unit * 3);
+  }
+  @media only screen and (min-width: 501px) {
     + .stop {
-        margin-top: (@base-unit * 1);
+      margin-top: 0;
     }
-    @media only screen and (min-width: 501px)  {
-        + .stop {
-            margin-top: 0
-        }
-    }
+  }
 }
-.area1 { grid-area: area1; }
-.area2 { grid-area: area2; }
-.area3 {
-    grid-area: area3;
-    @media only screen and (min-width: 501px)  {
-        text-align: right;
-    }
+.area1 {
+  grid-area: area1;
+}
+.area2 {
+  grid-area: area2;
+  @media only screen and (min-width: 501px) {
+    text-align: right;
+  }
 }
 span {
-    display: block;
+  display: block;
 }
 h1 {
-    margin-bottom: (@base-unit * 2);
-    border-bottom: 1px solid;
+  padding-bottom: (@base-unit * 2);
+  border-bottom: 1px solid;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 6rem 1fr;
+  grid-column-gap: (@base-unit * 3);
 }
 </style>
 
