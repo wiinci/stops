@@ -1,5 +1,5 @@
 "use strict" // eslint-disable-line
 
 module.exports = {
-    NODE_ENV: '"production"'
+  NODE_ENV: '"production"'
 };
