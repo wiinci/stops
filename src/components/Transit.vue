@@ -43,7 +43,6 @@ export default {
   data() {
     return {
       error: false,
-      loading: true,
       stops: [],
       coords: [],
       features: [],
@@ -58,6 +57,10 @@ export default {
 
     lon() {
       return this.coords[1];
+    },
+
+    loading() {
+      return this.coords.length < 1;
     }
   },
 
@@ -95,7 +98,13 @@ export default {
     async getLocation() {
       try {
         this.coords = await this.getCurrentLocation();
-        this.features = await axios.get(`https://transit.land/api/v1/stops.geojson?lon=${this.lon}&lat=${this.lat}&r=350`);
+        this.features = await axios.get("https://transit.land/api/v1/stops.geojson", {
+          params: {
+            lon: this.lon,
+            lat: this.lat,
+            r: 350
+          }
+        });
       } catch (e) {
         this.errmsg = e;
       }
