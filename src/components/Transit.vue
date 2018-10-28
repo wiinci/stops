@@ -51,12 +51,20 @@ export default {
     };
   },
 
-  created() {
-    // this.getPosition();
+  computed: {
+    lat() {
+      return this.coords[0];
+    },
+
+    lon() {
+      return this.coords[1];
+    }
   },
 
   mounted() {
-    this.getLocation();
+    this.$nextTick(() => {
+      this.getLocation();
+    });
   },
 
   methods: {
@@ -87,7 +95,7 @@ export default {
     async getLocation() {
       try {
         this.coords = await this.getCurrentLocation();
-        this.features = await axios.get(`https://transit.land/api/v1/stops.geojson?lon=${this.coords[1]}&lat=${this.coords[0]}&r=350`);
+        this.features = await axios.get(`https://transit.land/api/v1/stops.geojson?lon=${this.lon}&lat=${this.lat}&r=350`);
       } catch (e) {
         this.errmsg = e;
       }
