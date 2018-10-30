@@ -1,10 +1,9 @@
 <template>
-  <main v-if="error">
-    <p>Sorry, ran into a fetch error. Please try again later.</p>
+  <main v-if="errmsg">
+    <p>{{ errmsg }}</p>
   </main>
 
   <main v-else>
-    <p>{{ errmsg }}</p>
     <p>{{ coords }}</p>
     <pre>{{ features }}</pre>
     <section v-if="loading">Loading …</section>
@@ -42,7 +41,6 @@ export default {
   name: "Transit",
   data() {
     return {
-      error: false,
       stops: [],
       coords: [],
       features: [],
@@ -64,10 +62,14 @@ export default {
     }
   },
 
+  created() {
+    this.getLocation();
+  },
+
   mounted() {
-    this.$nextTick(() => {
-      this.getLocation();
-    });
+    // this.$nextTick(() => {
+    //   this.getLocation();
+    // });
   },
 
   methods: {
