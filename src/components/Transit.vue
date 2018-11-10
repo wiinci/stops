@@ -46,12 +46,12 @@ export default {
   },
 
   created() {
-    this.getLocation();
+    this.getStops();
   },
 
   mounted() {
     // this.$nextTick(() => {
-    //   this.getLocation();
+    //   this.getStops();
     // });
   },
 
@@ -80,7 +80,7 @@ export default {
       });
     },
 
-    async getLocation() {
+    async getStops() {
       try {
         // Current location
         this.coords = await this.getCurrentLocation();
@@ -109,6 +109,8 @@ export default {
         this.errmsg = e;
       }
     }
+
+
   }
 };
 </script>
