@@ -11,23 +11,6 @@
     <article v-else>
       <section>
         <h1>Route number — Headsign</h1>
-        <ul>
-          <li
-            v-for="stop in stops"
-            :key="stop.id"
-          >
-            <ul>
-              <li
-                v-for="route in stop.properties.routes_serving_stop"
-                :key="route.route_onestop_id"
-              >
-                {{ route.route_name }}
-                {{ stop.properties.name }}
-              </li>
-            </ul>
-          </li>
-        </ul>
-
       </section>
     </article>
   </main>
@@ -99,13 +82,28 @@ export default {
 
     async getLocation() {
       try {
+        // Current location
         this.coords = await this.getCurrentLocation();
+
+        // Features
         this.features = await axios.get("https://transit.land/api/v1/stops.geojson", {
           params: {
             lon: this.lon,
             lat: this.lat,
-            r: 350
+            r: 400
           }
+        });
+
+        // Stop name and ID
+        this.stops = await this.features.data.features.map(f => {
+          const s = {
+            coordinates: f.geometry.coordinates,
+            id: f.id,
+            name: f.properties.name,
+            route_name: f.properties.routes_serving_stop[0].route_name,
+            route_onestop_id: f.properties.routes_serving_stop[0].route_onestop_id
+          };
+          return s;
         });
       } catch (e) {
         this.errmsg = e;
