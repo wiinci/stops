@@ -131,9 +131,7 @@ export default {
             date: "today",
             operator_onestop_id: this.features.data.features[0].properties.operators_serving_stop[0].operator_onestop_id,
             origin_departure_between: "now,now+1200",
-            origin_onestop_id: f.properties.title,
-            per_page: 10,
-            total: "true"
+            origin_onestop_id: f.properties.title
           }
         }).catch(e => {
           this.hasError = true;
