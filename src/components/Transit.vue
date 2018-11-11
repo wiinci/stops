@@ -1,16 +1,16 @@
 <template>
-  <main v-if="errmsg">
-    <p>{{ errmsg }}</p>
+  <main v-if="hasError">
+    <p>{{ errorMsg }}</p>
   </main>
 
   <main v-else>
-    <p>{{ coords }}</p>
-    <pre>{{ features }}</pre>
-    <section v-if="loading">Loading …</section>
+    <section v-if="isLoading">Loading …</section>
 
     <article v-else>
       <section>
         <h1>Route number — Headsign</h1>
+        <p>{{ coords }}</p>
+        <pre v-if="hasTime">{{ features }}</pre>
       </section>
     </article>
   </main>
@@ -27,7 +27,9 @@ export default {
       stops: [],
       coords: [],
       features: [],
-      errmsg: ""
+      times: [],
+      hasError: false,
+      errorMsg: ""
     };
   },
 
@@ -40,8 +42,18 @@ export default {
       return this.coords[1];
     },
 
-    loading() {
+    isLoading() {
       return this.coords.length < 1;
+    },
+
+    hasTime() {
+      return this.times.length > 1;
+    }
+  },
+
+  watch: {
+    features() {
+      this.getTimes();
     }
   },
 
@@ -106,11 +118,32 @@ export default {
           return s;
         });
       } catch (e) {
-        this.errmsg = e;
+        this.hasError = true;
+        this.errorMsg = `Error: ${e}`;
       }
+    },
+
+    async getTimes() {
+      const times = [];
+      this.features.data.features.map(f => {
+        const a = axios.get("https://transit.land/api/v1/schedule_stop_pairs", {
+          params: {
+            date: "today",
+            operator_onestop_id: this.features.data.features[0].properties.operators_serving_stop[0].operator_onestop_id,
+            origin_departure_between: "now,now+1200",
+            origin_onestop_id: f.properties.title,
+            per_page: 10,
+            total: "true"
+          }
+        }).catch(e => {
+          this.hasError = true;
+          this.errorMsg = `Error: ${e}`;
+        });
+        return times.push(a);
+      });
+
+      this.times = await Promise.all(times);
     }
-
-
   }
 };
 </script>
