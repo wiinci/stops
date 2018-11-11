@@ -7,10 +7,29 @@
     <section v-if="isLoading">Loading …</section>
 
     <article v-else>
-      <section>
+      <!-- <section>
         <h1>Route number — Headsign</h1>
         <p>{{ coords }}</p>
-        <pre v-if="hasTime">{{ features }}</pre>
+        <pre v-if="hasTime">
+          {{ features }}
+          {{ times }}
+        </pre>
+      </section> -->
+
+      <section>
+        <ul v-if="hasTime">
+          <li
+            v-for="(stop, index) in stops"
+            v-if="times[index].data.schedule_stop_pairs.length"
+            :key="stop.id"
+          >
+            <p>Route: {{ stop.route_name }}</p>
+            <p>Name: {{ stop.name }}</p>
+            <p>Coordinates: Lat: {{ stop.coordinates[1] }}, Lon: {{ stop.coordinates[0] }}</p>
+            <p>Arriving at {{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</p>
+            <p>Sign: {{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</p>
+          </li>
+        </ul>
       </section>
     </article>
   </main>
@@ -24,12 +43,12 @@ export default {
   name: "Transit",
   data() {
     return {
-      stops: [],
       coords: [],
+      errorMsg: "",
       features: [],
-      times: [],
       hasError: false,
-      errorMsg: ""
+      stops: [],
+      times: []
     };
   },
 
