@@ -61,12 +61,6 @@ export default {
     this.getStops();
   },
 
-  mounted() {
-    // this.$nextTick(() => {
-    //   this.getStops();
-    // });
-  },
-
   methods: {
     getCurrentLocation() {
       const options = {
