@@ -33,12 +33,6 @@ body {
   padding: 16px;
   color: #453e45;
   background: url("assets/images/1.png") #fafafa;
-
-  @media only screen and (min-width: 501px) {
-    box-shadow: inset 0 0 0 3px #fb7700, inset 0 0 0 6px #fbc00d;
-    border: 3px solid #1e90d6;
-    padding: 28px;
-  }
 }
 body,
 html {
