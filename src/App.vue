@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <main id="app">
     <router-view/>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -12,35 +12,35 @@ export default {
 
 <style lang="less">
 html {
-  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  font-size: 62.5%;
   box-sizing: border-box;
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 62.5%;
 }
 * {
-  padding: 0;
-  margin: 0;
   box-sizing: inherit;
+  margin: 0;
+  padding: 0;
   &:before,
   &:after {
     box-sizing: inherit;
   }
 }
 body {
-  font-size: 1.6rem;
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding: 16px;
+  -webkit-font-smoothing: antialiased;
   color: #453e45;
-  background: url("assets/images/1.png") #fafafa;
+  font-size: 1.6rem;
 }
 body,
-html {
+html,
+main,
+article {
+  -webkit-overflow-scrolling: touch;
   min-height: 100vh;
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
 }
 ::selection {
   background-color: rgba(250, 179, 0, 0.3);
+  color: #453e45;
 }
 </style>
