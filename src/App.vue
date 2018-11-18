@@ -11,6 +11,9 @@ export default {
 </script>
 
 <style lang="less">
+@import (reference) './assets/styles/variables/global.less';
+@import (reference) './assets/styles/bundles/typography.less';
+
 html {
   box-sizing: border-box;
   font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -28,8 +31,8 @@ html {
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  color: #453e45;
-  font-size: 1.6rem;
+  color: @marta-black;
+  #type.body();
 }
 body,
 html,
@@ -41,6 +44,6 @@ article {
 }
 ::selection {
   background-color: rgba(250, 179, 0, 0.3);
-  color: #453e45;
+  color: @marta-black;
 }
 </style>
