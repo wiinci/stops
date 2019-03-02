@@ -1,39 +1,36 @@
 <template>
-  <main v-if="hasError">
-    <p>{{ errorMsg }}</p>
-  </main>
+  <article v-if="hasError">
+    <h1 class="error">{{ errorMsg }}</h1>
+  </article>
 
-  <main v-else>
+  <article v-else>
     <section v-if="isLoading">Loading …</section>
 
-    <article v-else>
-      <!-- <section>
-        <h1>Route number — Headsign</h1>
-        <p>{{ coords }}</p>
-        <pre v-if="hasTime">
-          {{ features }}
-          {{ times }}
-        </pre>
-      </section> -->
-
-      <section>
-        <ul v-if="hasTime">
-          <li
-            v-for="(stop, index) in stops"
-            v-if="times[index].data.schedule_stop_pairs.length"
-            :key="stop.id"
-          >
-            <p>Route: {{ stop.route_name }}</p>
-            <p>Name: {{ stop.name }}</p>
-            <p>Coordinates: Lat: {{ stop.coordinates[1] }}, Lon: {{ stop.coordinates[0] }}</p>
-            <p>Arriving at {{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</p>
-            <p>Sign: {{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</p>
-          </li>
-        </ul>
-      </section>
-    </article>
-  </main>
-
+    <section
+      v-else
+      class="table-root"
+    >
+      <table v-if="hasTime">
+        <tr>
+          <th class="route-name">Route</th>
+          <th>Intersection</th>
+          <th>Sign</th>
+          <th>Arriving</th>
+        </tr>
+        <tr
+          v-for="(stop, index) in stops"
+          :key="stop.id"
+        >
+          <td class="route-name">{{ stop.route_name }}</td>
+          <td>{{ stop.name }}</td>
+          <td>{{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</td>
+          <td>
+            <time :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time">{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
+          </td>
+        </tr>
+      </table>
+    </section>
+  </article>
 </template>
 
 <script>
@@ -111,13 +108,16 @@ export default {
         this.coords = await this.getCurrentLocation();
 
         // Features
-        this.features = await axios.get("https://transit.land/api/v1/stops.geojson", {
-          params: {
-            lon: this.lon,
-            lat: this.lat,
-            r: 400
+        this.features = await axios.get(
+          "https://transit.land/api/v1/stops.geojson",
+          {
+            params: {
+              lon: this.lon,
+              lat: this.lat,
+              r: 400
+            }
           }
-        });
+        );
 
         // Stop name and ID
         this.stops = await this.features.data.features.map(f => {
@@ -126,7 +126,8 @@ export default {
             id: f.id,
             name: f.properties.name,
             route_name: f.properties.routes_serving_stop[0].route_name,
-            route_onestop_id: f.properties.routes_serving_stop[0].route_onestop_id
+            route_onestop_id:
+              f.properties.routes_serving_stop[0].route_onestop_id
           };
           return s;
         });
@@ -139,17 +140,20 @@ export default {
     async getTimes() {
       const times = [];
       this.features.data.features.map(f => {
-        const a = axios.get("https://transit.land/api/v1/schedule_stop_pairs", {
-          params: {
-            date: "today",
-            operator_onestop_id: this.features.data.features[0].properties.operators_serving_stop[0].operator_onestop_id,
-            origin_departure_between: "now,now+1200",
-            origin_onestop_id: f.properties.title
-          }
-        }).catch(e => {
-          this.hasError = true;
-          this.errorMsg = `Error: ${e}`;
-        });
+        const a = axios
+          .get("https://transit.land/api/v1/schedule_stop_pairs", {
+            params: {
+              date: "today",
+              operator_onestop_id: this.features.data.features[0].properties
+                .operators_serving_stop[0].operator_onestop_id,
+              origin_departure_between: "now,now+1200",
+              origin_onestop_id: f.properties.title
+            }
+          })
+          .catch(e => {
+            this.hasError = true;
+            this.errorMsg = `Error: ${e}`;
+          });
         return times.push(a);
       });
 
@@ -159,3 +163,68 @@ export default {
 };
 </script>
 
+<style lang="less" scoped>
+@import (reference) "../assets/styles/variables/global.less";
+@import (reference) "../assets/styles/bundles/typography.less";
+
+table {
+  table-layout: auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th { text-align: left; }
+
+th,
+td {
+  white-space: nowrap;
+  padding: 12px;
+  border: 1px solid currentColor;
+}
+
+.table-root {
+  position: relative;
+  overflow-x: auto;
+}
+
+.route-name { text-align: center; }
+
+td:first-child,
+th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: @marta-white;
+}
+
+td:last-child,
+th:last-child {
+  text-align: right;
+}
+
+article {
+  background: url("/static/images/1.png") #fafafa;
+  padding: (@base-unit * 4);
+}
+
+.error {
+  color: @marta-red;
+}
+
+.h2 {
+  #type.h3();
+}
+
+ul {
+  list-style-type: none;
+  list-style-position: outside;
+}
+
+li {
+  padding: (@base-unit * 4) 0;
+
+  + li {
+    border-top: 1px solid @marta-black;
+  }
+}
+</style>
