@@ -23,9 +23,9 @@
         >
           <td class="route-name">{{ stop.route_name }}</td>
           <td>{{ stop.name }}</td>
-          <td>{{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</td>
+          <td>{{ stopsWithTime[index].data.schedule_stop_pairs[0].trip_headsign }}</td>
           <td>
-            <time :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time">{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
+            <time :datetime="stopsWithTime[index].data.schedule_stop_pairs[0].origin_arrival_time">{{ stopsWithTime[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
           </td>
         </tr>
       </table>
@@ -64,6 +64,12 @@ export default {
 
     hasTime() {
       return this.times.length > 1;
+    },
+
+    stopsWithTime() {
+      return this.times.filter(function (time) {
+        return time.data.schedule_stop_pairs.length > 0;
+      });
     }
   },
 
