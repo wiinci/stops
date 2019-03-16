@@ -82,9 +82,9 @@ export default {
   methods: {
     getCurrentLocation() {
       const options = {
-        enableHighAccuracy: true,
-        timeout: 9000,
-        maximumAge: 0
+        enableHighAccuracy: false,
+        timeout: 9 * 1000, // ms
+        maximumAge: 2 * 60 * 1000 // ms
       };
 
       return new Promise((resolve, reject) => {
