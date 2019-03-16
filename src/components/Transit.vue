@@ -17,19 +17,21 @@
           <th>Sign</th>
           <th>Arriving</th>
         </tr>
-        <tr
+        <template
           v-for="(stop, index) in stops"
-          :key="stop.id"
         >
-          <template v-if="times[index].data.schedule_stop_pairs.length">
+          <tr
+            v-if="times[index].data.schedule_stop_pairs.length"
+            :key="stop.id"
+          >
             <td class="route-name">{{ stop.route_name }}</td>
             <td>{{ stop.name }}</td>
             <td>{{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</td>
             <td>
               <time :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time">{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
             </td>
-          </template>
-        </tr>
+          </tr>
+        </template>
       </table>
     </section>
   </article>
