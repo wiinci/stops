@@ -198,7 +198,6 @@ th:first-child {
   position: sticky;
   left: 0;
   z-index: 1;
-  background: @marta-white;
 }
 
 td:last-child,
@@ -207,28 +206,14 @@ th:last-child {
 }
 
 article {
-  background: url("/static/images/1.png") #fafafa;
   padding: (@base-unit * 4);
 }
 
 .error {
-  color: @marta-red;
+  color: @error;
 }
 
 .h2 {
   #type.h3();
-}
-
-ul {
-  list-style-type: none;
-  list-style-position: outside;
-}
-
-li {
-  padding: (@base-unit * 4) 0;
-
-  + li {
-    border-top: 1px solid @marta-black;
-  }
 }
 </style>

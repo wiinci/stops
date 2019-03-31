@@ -31,7 +31,8 @@ html {
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  color: @marta-black;
+  color: @default-copy;
+  background-color: @background;
   #type.body();
 }
 body,
@@ -43,7 +44,7 @@ article {
   scroll-behavior: smooth;
 }
 ::selection {
-  background-color: rgba(250, 179, 0, 0.3);
-  color: @marta-black;
+  background-color: @selection;
+  color: @background;
 }
 </style>
