@@ -14,6 +14,7 @@
         <tr>
           <th class="route-name">Route</th>
           <th>Intersection</th>
+          <th>To</th>
           <th>Sign</th>
           <th>Arriving</th>
         </tr>
@@ -26,6 +27,7 @@
           >
             <td class="route-name">{{ stop.route_name }}</td>
             <td>{{ stop.name }}</td>
+            <td>{{ nextStops[index].data.stops[0].name }}</td>
             <td>{{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</td>
             <td>
               <time :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time">{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
@@ -48,6 +50,7 @@ export default {
       errorMsg: "",
       features: [],
       hasError: false,
+      nextStops: [],
       stops: [],
       times: []
     };
@@ -74,6 +77,10 @@ export default {
   watch: {
     features() {
       this.getTimes();
+    },
+
+    times() {
+      this.getNextStopNames();
     }
   },
 
@@ -162,6 +169,21 @@ export default {
       });
 
       this.times = await Promise.all(times);
+    },
+
+    async getNextStopNames() {
+      const names = [];
+      this.times.map(t => {
+        if (t.data.schedule_stop_pairs[0]) {
+          const a = axios.get("https://transit.land/api/v1/stops.json", {
+            params: { onestop_id: t.data.schedule_stop_pairs[0].destination_onestop_id }
+          });
+          return names.push(a);
+        }
+        return 0;
+      });
+
+      this.nextStops = await Promise.all(names);
     }
   }
 };
