@@ -27,7 +27,7 @@
           >
             <td class="route-name">{{ stop.route_name }}</td>
             <td>{{ stop.name }}</td>
-            <td>{{ nextStops[index].data.stops[0].name }}</td>
+            <td v-if="nextStops[index]">{{ nextStops[index].data.stops[0].name }}</td>
             <td>{{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</td>
             <td>
               <time :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time">{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
@@ -180,9 +180,8 @@ export default {
           });
           return names.push(a);
         }
-        return 0;
+        return names.push(0);
       });
-
       this.nextStops = await Promise.all(names);
     }
   }
