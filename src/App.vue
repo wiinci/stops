@@ -19,6 +19,7 @@ html {
   font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 62.5%;
 }
+
 * {
   box-sizing: inherit;
   margin: 0;
@@ -28,6 +29,7 @@ html {
     box-sizing: inherit;
   }
 }
+
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -35,6 +37,7 @@ body {
   background-color: @background;
   #type.body();
 }
+
 body,
 html,
 main,
@@ -43,6 +46,13 @@ article {
   min-height: 100vh;
   scroll-behavior: smooth;
 }
+
+main {
+  max-width: 70ch;
+  padding: 1vmax;
+  margin: 0 auto;
+}
+
 ::selection {
   background-color: @selection;
   color: @background;
