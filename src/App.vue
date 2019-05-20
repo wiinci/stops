@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "App"
+  name: 'App'
 };
 </script>
 
@@ -39,16 +39,14 @@ body {
 }
 
 body,
-html,
-main,
-article {
+html {
   -webkit-overflow-scrolling: touch;
   min-height: 100vh;
   scroll-behavior: smooth;
 }
 
 main {
-  max-width: 70ch;
+  max-width: 60ch;
   padding: 1vmax;
   margin: 0 auto;
 }

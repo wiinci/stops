@@ -3,56 +3,51 @@
     <h1 class="error">{{ errorMsg }}</h1>
   </article>
 
-  <article v-else>
-    <section v-if="isLoading">Loading …</section>
-
-    <section
-      v-else
-      class="table-root"
-    >
-      <table v-if="hasTime">
-        <tr>
-          <th class="route-name">Route</th>
-          <th>Intersection</th>
-          <th>To</th>
-          <th>Sign</th>
-          <th>Arriving</th>
-        </tr>
-        <template
-          v-for="(stop, index) in stops"
-        >
-          <tr
+  <section v-else>
+    <div v-if="isLoading">Loading …</div>
+    <template v-else>
+      <template v-if="hasTime">
+        <template v-for="(stop, index) in stops">
+          <article
             v-if="times[index].data.schedule_stop_pairs.length"
             :key="stop.id"
+            class="row"
           >
-            <td class="route-name">{{ stop.route_name }}</td>
-            <td>{{ stop.name }}</td>
-            <td v-if="nextStops[index]">{{ nextStops[index].data.stops[0].name }}</td>
-            <td>{{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</td>
-            <td>
-              <time :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time">{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
-            </td>
-          </tr>
+            <!-- stop.name.toLowerCase().split('@').map(w => w.split(' ').map(z => z[0].toUpperCase() + z.slice(1)).join(' ')).join(' and ').trim() -->
+            <!-- times[index].data.schedule_stop_pairs[0].trip_headsign.split('-')[1].trim() -->
+            <div class="slat">
+              <p class="small-meta">Route {{ stop.route_name }} / {{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</p>
+              <p class="caption station">{{ stop.name }}</p>
+            </div>
+            <div class="slat">
+              <p class="small-meta">In 5 minutes</p>
+              <time
+                :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time"
+                class="caption"
+              >{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
+            </div>
+          </article>
         </template>
-      </table>
-    </section>
-  </article>
+      </template>
+    </template>
+
+  </section>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "Transit",
+  name: 'Transit',
   data() {
     return {
       coords: [],
-      errorMsg: "",
+      errorMsg: '',
       features: [],
       hasError: false,
       nextStops: [],
       stops: [],
-      times: []
+      times: [],
     };
   },
 
@@ -71,7 +66,7 @@ export default {
 
     hasTime() {
       return this.times.length > 1;
-    }
+    },
   },
 
   watch: {
@@ -81,7 +76,7 @@ export default {
 
     times() {
       this.getNextStopNames();
-    }
+    },
   },
 
   created() {
@@ -93,12 +88,12 @@ export default {
       const options = {
         enableHighAccuracy: false,
         timeout: 9 * 1000, // ms
-        maximumAge: 2 * 60 * 1000 // ms
+        maximumAge: 2 * 60 * 1000, // ms
       };
 
       return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
-          reject("Geolocation is not supported in your browser.");
+          reject('Geolocation is not supported in your browser.');
         } else {
           navigator.geolocation.getCurrentPosition(
             position => {
@@ -120,13 +115,14 @@ export default {
 
         // Features
         this.features = await axios.get(
-          "https://transit.land/api/v1/stops.geojson",
+          'https://transit.land/api/v1/stops.geojson',
           {
             params: {
               lon: this.lon,
               lat: this.lat,
-              r: 400
-            }
+              r: 400,
+              // operated_by: "f-dnh-marta"
+            },
           }
         );
 
@@ -138,7 +134,7 @@ export default {
             name: f.properties.name,
             route_name: f.properties.routes_serving_stop[0].route_name,
             route_onestop_id:
-              f.properties.routes_serving_stop[0].route_onestop_id
+              f.properties.routes_serving_stop[0].route_onestop_id,
           };
           return s;
         });
@@ -152,14 +148,14 @@ export default {
       const times = [];
       this.features.data.features.map(f => {
         const a = axios
-          .get("https://transit.land/api/v1/schedule_stop_pairs", {
+          .get('https://transit.land/api/v1/schedule_stop_pairs', {
             params: {
-              date: "today",
+              date: 'today',
               operator_onestop_id: this.features.data.features[0].properties
                 .operators_serving_stop[0].operator_onestop_id,
-              origin_departure_between: "now,now+1200",
-              origin_onestop_id: f.properties.title
-            }
+              origin_departure_between: 'now,now+1200',
+              origin_onestop_id: f.properties.title,
+            },
           })
           .catch(e => {
             this.hasError = true;
@@ -175,16 +171,18 @@ export default {
       const names = [];
       this.times.map(t => {
         if (t.data.schedule_stop_pairs[0]) {
-          const a = axios.get("https://transit.land/api/v1/stops.json", {
-            params: { onestop_id: t.data.schedule_stop_pairs[0].destination_onestop_id }
+          const a = axios.get('https://transit.land/api/v1/stops.json', {
+            params: {
+              onestop_id: t.data.schedule_stop_pairs[0].destination_onestop_id,
+            },
           });
           return names.push(a);
         }
         return names.push(0);
       });
       this.nextStops = await Promise.all(names);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -192,49 +190,32 @@ export default {
 @import (reference) "../assets/styles/variables/global.less";
 @import (reference) "../assets/styles/bundles/typography.less";
 
-table {
-  table-layout: auto;
-  border-collapse: collapse;
-  width: 100%;
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 0;
+
+  + .row {
+    border-top: 2px solid lighten(@background, 10%);
+  }
 }
 
-th { text-align: left; }
-
-th,
-td {
-  white-space: nowrap;
-  padding: 12px;
-  border: 1px solid currentColor;
+.slat {
+    + .slat {
+    margin: 0 0 0 2rem;
+  }
 }
 
-.table-root {
-  position: relative;
-  overflow-x: auto;
+.caption {
+  #type.h2();
 }
 
-.route-name { text-align: center; }
-
-td:first-child,
-th:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 1;
-}
-
-td:last-child,
-th:last-child {
-  text-align: right;
-}
-
-article {
-  padding: (@base-unit * 4);
-}
-
-.error {
-  color: @error;
-}
-
-.h2 {
-  #type.h3();
+.small-meta {
+  #type.small();
+  #type.monospace();
+  text-transform: uppercase;
+  letter-spacing: 0.02rem;
+  display: block;
+  font-weight: 600;
 }
 </style>
