@@ -37,7 +37,7 @@ module.exports = {
     "object-curly-spacing": ["warn", "always"],
     "prefer-arrow-callback": "off",
     "quote-props": ["error", "consistent-as-needed"],
-    "quotes": ["warn", "double", { avoidEscape: true }],
+    "quotes": ["error", "single", { avoidEscape: true }],
 
     // don"t require .vue extension when importing
     "import/extensions": ["error", "always", {

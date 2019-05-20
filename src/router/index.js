@@ -1,5 +1,5 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue';
+import Router from 'vue-router';
 
 Vue.use(Router);
 
@@ -11,19 +11,19 @@ export default new Router({
     //     component: () => import("@/components/Marta")
     // },
     {
-      path: "/",
-      name: "Transit",
-      component: () => import("@/components/Transit")
+      path: '/',
+      name: 'Transit',
+      component: () => import('@/components/Transit')
     },
     {
-      path: "/bus/:route",
-      name: "Bus",
-      component: () => import("@/components/Bus")
+      path: '/bus/:route',
+      name: 'Bus',
+      component: () => import('@/components/Bus')
     },
     {
-      path: "/train/:line",
-      name: "Train",
-      component: () => import("@/components/Train")
+      path: '/train/:line',
+      name: 'Train',
+      component: () => import('@/components/Train')
     }
   ]
 });
