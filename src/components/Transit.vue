@@ -14,11 +14,11 @@
             class="row"
           >
             <div>
-              <p class="small-meta">Route {{ stop.route_name }} / {{ times[index].data.schedule_stop_pairs[0].trip_headsign.split(/(\d+) -*/).pop().trim() }}</p>
+              <p class="small-meta">Route {{ stop.route_name }} &rarr; {{ times[index].data.schedule_stop_pairs[0].trip_headsign.split(/(\d+) -*/).pop().trim() }}</p>
               <p class="caption station">{{ stop.name.split('@').join(' & ').trim() }}</p>
             </div>
             <div>
-              <p class="small-meta">In 5 minutes</p>
+              <p class="small-meta">Arriving</p>
               <time
                 :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time"
                 class="caption"
