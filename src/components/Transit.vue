@@ -14,7 +14,7 @@
             class="row"
           >
             <div>
-              <p class="small-meta">Route {{ stop.route_name }} &rarr; {{ times[index].data.schedule_stop_pairs[0].trip_headsign.split(/(\d+) -*/).pop().trim() }}</p>
+              <p class="small-meta">Route {{ stop.route_name }} &rarr; {{ times[index].data.schedule_stop_pairs[0].trip_headsign.split(/(\d+) -*/).pop().trim().toUpperCase() }}</p>
               <p class="caption station">{{ stop.name.split('@').join(' & ').trim() }}</p>
             </div>
             <div>
@@ -69,7 +69,6 @@ export default {
   watch: {
     features() {
       this.getTimes();
-      console.log(this.features.data.features);
     },
   },
 
@@ -195,7 +194,6 @@ export default {
 .small-meta {
   #type.small();
   #type.monospace();
-  text-transform: uppercase;
   letter-spacing: 0.02rem;
   display: block;
   font-weight: 600;
