@@ -14,7 +14,7 @@
             class="row"
           >
             <div>
-              <p class="small-meta">Route {{ stop.route_name }} &rarr; {{ times[index].data.schedule_stop_pairs[0].trip_headsign.split(/(\d+) -*/).pop().trim().toUpperCase() }}</p>
+              <p class="small-meta">Route {{ stop.route_name }} &rarr; {{ titleCase(times[index].data.schedule_stop_pairs[0].trip_headsign.split(/(\d+) -*/).pop().trim().toUpperCase()) }}</p>
               <p class="caption station">{{ stop.name.split('@').join(' & ').trim() }}</p>
             </div>
             <div>
@@ -63,7 +63,7 @@ export default {
 
     hasTime() {
       return this.times.length > 1;
-    },
+    }
   },
 
   watch: {
@@ -77,6 +77,10 @@ export default {
   },
 
   methods: {
+    titleCase(text) {
+      return text.toLowerCase().split(' ').map(t => (t.length > 2 ? t.charAt(0).toUpperCase() + t.slice(1) : t.toUpperCase())).join(' ');
+    },
+
     getCurrentLocation() {
       const options = {
         enableHighAccuracy: false,
