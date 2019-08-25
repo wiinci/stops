@@ -22,13 +22,12 @@
               <time
                 :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time"
                 class="caption"
-              >{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
+              >{{ getMinutes(times[index].data.schedule_stop_pairs[0].origin_arrival_time) }}</time>
             </div>
           </article>
         </template>
       </template>
     </template>
-
   </section>
 </template>
 
@@ -63,6 +62,18 @@ export default {
 
     hasTime() {
       return this.times.length > 1;
+    },
+
+    getMinutes() {
+      return (timeStr => {
+        const now = Date.now();
+        const time = new Date();
+        time.setHours(timeStr.split(':')[0]);
+        time.setMinutes(timeStr.split(':')[1]);
+        time.setSeconds(timeStr.split(':')[2]);
+        const minutes = (Math.floor((time - now) / (60 * 1000)));
+        return minutes === 1 ? `${minutes} minute` : `${minutes} minutes`;
+      });
     }
   },
 
