@@ -35,6 +35,7 @@ body {
   -webkit-font-smoothing: antialiased;
   color: @default-copy;
   background-color: @background;
+  text-rendering: optimizeLegibility;
   #type.body();
 }
 

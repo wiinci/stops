@@ -13,24 +13,21 @@
             :key="stop.id"
             class="row"
           >
-            <!-- stop.name.toLowerCase().split('@').map(w => w.split(' ').map(z => z[0].toUpperCase() + z.slice(1)).join(' ')).join(' and ').trim() -->
-            <!-- times[index].data.schedule_stop_pairs[0].trip_headsign.split('-')[1].trim() -->
-            <div class="slat">
-              <p class="small-meta">Route {{ stop.route_name }} / {{ times[index].data.schedule_stop_pairs[0].trip_headsign }}</p>
-              <p class="caption station">{{ stop.name }}</p>
+            <div>
+              <p class="small-meta">Route {{ stop.route_name }} &rarr; {{ titleCase(times[index].data.schedule_stop_pairs[0].trip_headsign.split(/(\d+) -*/).pop().trim().toUpperCase()) }}</p>
+              <p class="caption station">{{ stop.name.split('@').join(' & ').trim() }}</p>
             </div>
-            <div class="slat">
-              <p class="small-meta">In 5 minutes</p>
+            <div>
+              <p class="small-meta">Arriving</p>
               <time
                 :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time"
                 class="caption"
-              >{{ times[index].data.schedule_stop_pairs[0].origin_arrival_time }}</time>
+              >{{ getMinutes(times[index].data.schedule_stop_pairs[0].origin_arrival_time) }}</time>
             </div>
           </article>
         </template>
       </template>
     </template>
-
   </section>
 </template>
 
@@ -45,7 +42,6 @@ export default {
       errorMsg: '',
       features: [],
       hasError: false,
-      nextStops: [],
       stops: [],
       times: [],
     };
@@ -67,15 +63,23 @@ export default {
     hasTime() {
       return this.times.length > 1;
     },
+
+    getMinutes() {
+      return (timeStr => {
+        const now = Date.now();
+        const time = new Date();
+        time.setHours(timeStr.split(':')[0]);
+        time.setMinutes(timeStr.split(':')[1]);
+        time.setSeconds(timeStr.split(':')[2]);
+        const minutes = (Math.floor((time - now) / (60 * 1000)));
+        return minutes === 1 ? `${minutes} minute` : `${minutes} minutes`;
+      });
+    }
   },
 
   watch: {
     features() {
       this.getTimes();
-    },
-
-    times() {
-      this.getNextStopNames();
     },
   },
 
@@ -84,6 +88,10 @@ export default {
   },
 
   methods: {
+    titleCase(text) {
+      return text.toLowerCase().split(' ').map(t => (t.length > 2 ? t.charAt(0).toUpperCase() + t.slice(1) : t.toUpperCase())).join(' ');
+    },
+
     getCurrentLocation() {
       const options = {
         enableHighAccuracy: false,
@@ -118,8 +126,11 @@ export default {
           'https://transit.land/api/v1/stops.geojson',
           {
             params: {
-              lon: this.lon,
+              headway_dates: 'today',
+              include: 'headways',
               lat: this.lat,
+              lon: this.lon,
+              per_page: 10,
               r: 400,
               // operated_by: "f-dnh-marta"
             },
@@ -166,22 +177,6 @@ export default {
 
       this.times = await Promise.all(times);
     },
-
-    async getNextStopNames() {
-      const names = [];
-      this.times.map(t => {
-        if (t.data.schedule_stop_pairs[0]) {
-          const a = axios.get('https://transit.land/api/v1/stops.json', {
-            params: {
-              onestop_id: t.data.schedule_stop_pairs[0].destination_onestop_id,
-            },
-          });
-          return names.push(a);
-        }
-        return names.push(0);
-      });
-      this.nextStops = await Promise.all(names);
-    },
   },
 };
 </script>
@@ -207,13 +202,13 @@ export default {
 }
 
 .caption {
-  #type.h2();
+  #type.h3();
+  #type.monospace();
 }
 
 .small-meta {
   #type.small();
   #type.monospace();
-  text-transform: uppercase;
   letter-spacing: 0.02rem;
   display: block;
   font-weight: 600;
