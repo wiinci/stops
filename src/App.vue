@@ -1,12 +1,12 @@
 <template>
   <main id="app">
-    <router-view/>
+    <router-view />
   </main>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
 };
 </script>
 
@@ -16,7 +16,8 @@ export default {
 
 html {
   box-sizing: border-box;
-  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   font-size: 62.5%;
 }
 
