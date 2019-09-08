@@ -14,15 +14,39 @@
             class="row"
           >
             <div>
-              <p class="small-meta">Route {{ stop.route_name }} &rarr; {{ titleCase(times[index].data.schedule_stop_pairs[0].trip_headsign.split(/(\d+) -*/).pop().trim().toUpperCase()) }}</p>
-              <p class="caption station">{{ stop.name.split('@').join(' & ').trim() }}</p>
+              <p class="small-meta">
+                Route {{ stop.route_name }} &rarr;
+                {{
+                  titleCase(
+                    times[index].data.schedule_stop_pairs[0].trip_headsign
+                      .split(/(\d+) -*/)
+                      .pop()
+                      .trim()
+                      .toUpperCase()
+                  )
+                }}
+              </p>
+              <p class="caption station">
+                {{
+                  stop.name
+                    .split('@')
+                    .join(' & ')
+                    .trim()
+                }}
+              </p>
             </div>
-            <div>
+            <div class="arriving">
               <p class="small-meta">Arriving</p>
               <time
-                :datetime="times[index].data.schedule_stop_pairs[0].origin_arrival_time"
+                :datetime="
+                  times[index].data.schedule_stop_pairs[0].origin_arrival_time
+                "
                 class="caption"
-              >{{ getMinutes(times[index].data.schedule_stop_pairs[0].origin_arrival_time) }}</time>
+              >{{
+                getMinutes(
+                  times[index].data.schedule_stop_pairs[0].origin_arrival_time
+                )
+              }}</time>
             </div>
           </article>
         </template>
@@ -65,16 +89,20 @@ export default {
     },
 
     getMinutes() {
-      return (timeStr => {
+      return timeStr => {
         const now = Date.now();
         const time = new Date();
         time.setHours(timeStr.split(':')[0]);
         time.setMinutes(timeStr.split(':')[1]);
         time.setSeconds(timeStr.split(':')[2]);
-        const minutes = (Math.floor((time - now) / (60 * 1000)));
-        return minutes === 1 ? `${minutes} minute` : `${minutes} minutes`;
-      });
-    }
+        const minutes = Math.floor((time - now) / (60 * 1000));
+        return minutes <= 1
+          ? 'Any minute now'
+          : minutes <= 0
+            ? 'At the stop!'
+            : `${minutes} minutes`;
+      };
+    },
   },
 
   watch: {
@@ -89,7 +117,15 @@ export default {
 
   methods: {
     titleCase(text) {
-      return text.toLowerCase().split(' ').map(t => (t.length > 2 ? t.charAt(0).toUpperCase() + t.slice(1) : t.toUpperCase())).join(' ');
+      return text
+        .toLowerCase()
+        .split(' ')
+        .map(t =>
+          t.length > 2
+            ? t.charAt(0).toUpperCase() + t.slice(1)
+            : t.toUpperCase()
+        )
+        .join(' ');
     },
 
     getCurrentLocation() {
@@ -182,8 +218,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import (reference) "../assets/styles/variables/global.less";
-@import (reference) "../assets/styles/bundles/typography.less";
+@import (reference) '../assets/styles/variables/global.less';
+@import (reference) '../assets/styles/bundles/typography.less';
 
 .row {
   display: flex;
@@ -196,7 +232,7 @@ export default {
 }
 
 .slat {
-    + .slat {
+  + .slat {
     margin: 0 0 0 2rem;
   }
 }
@@ -207,10 +243,14 @@ export default {
 }
 
 .small-meta {
-  #type.small();
+  #type.body();
   #type.monospace();
   letter-spacing: 0.02rem;
   display: block;
   font-weight: 600;
+}
+
+.arriving {
+  text-align: right;
 }
 </style>
