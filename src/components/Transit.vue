@@ -42,16 +42,19 @@
                   times[index].data.schedule_stop_pairs[0].origin_arrival_time
                 "
                 class="caption"
-              >{{
-                getMinutes(
-                  times[index].data.schedule_stop_pairs[0].origin_arrival_time
-                )
-              }}</time>
+              >
+                {{
+                  getMinutes(
+                    times[index].data.schedule_stop_pairs[0].origin_arrival_time
+                  )
+                }}
+              </time>
             </div>
           </article>
         </template>
       </template>
     </template>
+    <Footer />
   </section>
 </template>
 
@@ -245,9 +248,9 @@ export default {
 .small-meta {
   #type.body();
   #type.monospace();
-  letter-spacing: 0.02rem;
   display: block;
   font-weight: 600;
+  letter-spacing: 0.02rem;
 }
 
 .arriving {

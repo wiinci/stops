@@ -1,12 +1,18 @@
 <template>
-  <main id="app">
-    <router-view />
-  </main>
+  <div class="root">
+    <main id="app">
+      <router-view />
+    </main>
+    <Footer />
+  </div>
 </template>
 
 <script>
+import Footer from '@/components/Footer';
+
 export default {
   name: 'App',
+  components: { Footer },
 };
 </script>
 
@@ -15,10 +21,10 @@ export default {
 @import (reference) './assets/styles/bundles/typography.less';
 
 html {
+  #type.monospace();
   box-sizing: border-box;
-  font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   font-size: 62.5%;
+  height: 100%;
 }
 
 * {
@@ -34,23 +40,31 @@ html {
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  color: @default-copy;
-  background-color: @background;
-  text-rendering: optimizeLegibility;
   #type.body();
+  background-color: @background;
+  color: @default-copy;
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+}
+
+.root {
+  display: flex;
+  flex-flow: column;
+  min-height: inherit;
 }
 
 body,
 html {
   -webkit-overflow-scrolling: touch;
-  min-height: 100vh;
   scroll-behavior: smooth;
 }
 
 main {
-  max-width: 60ch;
-  padding: 1vmax;
+  flex: 1;
   margin: 0 auto;
+  max-width: 80vw;
+  padding: 1vmax;
+  width: 65ch;
 }
 
 ::selection {

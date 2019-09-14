@@ -3,41 +3,46 @@
 
 #type() {
   .h1 {
-    font-size: @h1;
     .line-height(@h1, 1.2);
+    font-size: @h1;
     font-weight: 400;
   }
 
   .h2 {
-    font-size: @h2;
     .line-height(@h2, 1.3);
+    font-size: @h2;
     font-weight: 400;
   }
 
   .h3 {
+    .line-height(@h3, 1.3);
     font-size: @h3;
-    .line-height(@h3, 1.333);
     font-weight: 400;
   }
 
   .body {
-    font-size: @body;
     .line-height(@body, 1.61);
+    font-size: @body;
   }
 
   .small {
-    font-size: @small;
     .line-height(@small, 1.61);
+    font-size: @small;
   }
 
   .micro {
+    .line-height(@micro, 1.61);
     font-size: @micro;
     text-transform: uppercase;
-    .line-height(@micro, 1.61);
   }
 
-  .monospace {
+  .monospace() {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
       monospace;
+  }
+
+  .default() {
+    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto,
+      Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   }
 }
