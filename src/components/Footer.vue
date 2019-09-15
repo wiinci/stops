@@ -1,11 +1,15 @@
 <template>
   <footer>
-    <p>
-      Created by <a href="https://twitter.com/_vinci">@_vinci</a> •
-      <a href="https://vuejs.org/">Built with Vue</a> •
-      <a href="https://zeit.co/">Deployed on Zeit</a> •
-      <a href="https://transit.land/">Powered by Transitland</a>
-    </p>
+    <nav>
+      <ul>
+        <li>
+          Created by&nbsp;<a href="https://twitter.com/_vinci">@_vinci</a>
+        </li>
+        <li>Powered by&nbsp;<a href="https://transit.land/">Transitland</a></li>
+        <li>Built with&nbsp;<a href="https://vuejs.org/">Vue</a></li>
+        <li>Deployed with&nbsp;<a href="https://zeit.co/">Zeit</a></li>
+      </ul>
+    </nav>
   </footer>
 </template>
 
@@ -23,7 +27,6 @@ footer {
   #type.small();
   background: #color.extended[yellow];
   color: #color.text[dark];
-  font-weight: 600;
   opacity: 0.7;
   padding: 0.5rem;
   text-align: center;
@@ -31,5 +34,13 @@ footer {
   a {
     color: #color.text[dark];
   }
+}
+
+ul {
+  display: flex;
+  flex-flow: row wrap;
+  flex: 1;
+  justify-content: space-around;
+  list-style-type: none;
 }
 </style>

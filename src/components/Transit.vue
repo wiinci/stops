@@ -26,14 +26,14 @@
                   )
                 }}
               </p>
-              <p class="caption station">
+              <address class="caption station">
                 {{
                   stop.name
                     .split('@')
                     .join(' & ')
                     .trim()
                 }}
-              </p>
+              </address>
             </div>
             <div class="arriving">
               <p class="small-meta">Arriving</p>
@@ -243,6 +243,11 @@ export default {
 .caption {
   #type.h3();
   #type.monospace();
+  font-style: normal;
+
+  @media only screen and (max-width: 510px) {
+    #type.body();
+  }
 }
 
 .small-meta {
