@@ -64,7 +64,7 @@ main {
   margin: 0 auto;
   max-width: 90vw;
   padding: 1vmax;
-  width: 65ch;
+  width: 90ch;
 }
 
 ::selection {
