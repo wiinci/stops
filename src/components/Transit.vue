@@ -125,7 +125,12 @@ export default {
         .split(' ')
         .map(t =>
           t.length > 2
-            ? t.charAt(0).toUpperCase() + t.slice(1)
+            ? t.includes('/')
+              ? t
+                .split('/')
+                .map(x => x.charAt(0).toUpperCase() + x.slice(1))
+                .join('/')
+              : t.charAt(0).toUpperCase() + t.slice(1)
             : t.toUpperCase()
         )
         .join(' ');
