@@ -9,7 +9,7 @@
       <template v-if="hasTime">
         <template v-for="(stop, index) in stops">
           <article
-            v-if="times[index].data.schedule_stop_pairs.length"
+            v-if="times[index].schedule_stop_pairs.length"
             :key="stop.id"
             class="row"
           >
@@ -18,7 +18,7 @@
                 Route {{ stop.route_name }} &rarr;
                 {{
                   titleCase(
-                    times[index].data.schedule_stop_pairs[0].trip_headsign
+                    times[index].schedule_stop_pairs[0].trip_headsign
                       .split(/(\d+) -*/)
                       .pop()
                       .trim()
@@ -39,13 +39,13 @@
               <p class="small-meta">Arriving</p>
               <time
                 :datetime="
-                  times[index].data.schedule_stop_pairs[0].origin_arrival_time
+                  times[index].schedule_stop_pairs[0].origin_arrival_time
                 "
                 class="caption"
               >
                 {{
                   getMinutes(
-                    times[index].data.schedule_stop_pairs[0].origin_arrival_time
+                    times[index].schedule_stop_pairs[0].origin_arrival_time
                   )
                 }}
               </time>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api';
 
 export default {
   name: 'Transit',
@@ -166,30 +166,20 @@ export default {
         this.coords = await this.getCurrentLocation();
 
         // Features
-        this.features = await axios.get(
-          'https://transit.land/api/v1/stops.geojson',
-          {
-            params: {
-              headway_dates: 'today',
-              include: 'headways',
-              lat: this.lat,
-              lon: this.lon,
-              per_page: 10,
-              r: 400,
-              // operated_by: "f-dnh-marta"
-            },
-          }
-        );
+        this.features = await api.getStops({
+          lat: this.lat,
+          lon: this.lon,
+          // operated_by: "f-dnh-marta"
+        });
 
         // Stop name and ID
-        this.stops = await this.features.data.features.map(f => {
+        this.stops = await this.features.stops.map(f => {
           const s = {
             coordinates: f.geometry.coordinates,
             id: f.id,
-            name: f.properties.name,
-            route_name: f.properties.routes_serving_stop[0].route_name,
-            route_onestop_id:
-              f.properties.routes_serving_stop[0].route_onestop_id,
+            name: f.name,
+            route_name: f.routes_serving_stop[0].route_name,
+            route_onestop_id: f.routes_serving_stop[0].route_onestop_id,
           };
           return s;
         });
@@ -201,16 +191,12 @@ export default {
 
     async getTimes() {
       const times = [];
-      this.features.data.features.map(f => {
-        const a = axios
-          .get('https://transit.land/api/v1/schedule_stop_pairs', {
-            params: {
-              date: 'today',
-              operator_onestop_id: this.features.data.features[0].properties
-                .operators_serving_stop[0].operator_onestop_id,
-              origin_departure_between: 'now,now+1200',
-              origin_onestop_id: f.properties.title,
-            },
+      this.features.stops.map(f => {
+        const a = api
+          .getTimes({
+            operator_onestop_id: this.features.stops[0]
+              .operators_serving_stop[0].operator_onestop_id,
+            origin_onestop_id: f.onestop_id,
           })
           .catch(e => {
             this.hasError = true;
