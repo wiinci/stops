@@ -29,10 +29,7 @@ export default {
       baseURL,
       method,
       params,
-    }).then(req => {
-      console.log(req);
-      return req.data;
-    });
+    }).then(req => req.data);
   },
 
   getStops({ lat, lon }) {
