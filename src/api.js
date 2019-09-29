@@ -24,7 +24,6 @@ const zipParams = {
 
 export default {
   async execute(method, baseURL, params) {
-    console.log(params);
     return client({
       baseURL,
       method,
