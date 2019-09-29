@@ -10,7 +10,7 @@
         <template v-for="(stop, index) in stops">
           <article
             v-if="times[index].schedule_stop_pairs.length"
-            :key="stop.name"
+            :key="stop.name + index"
             class="row"
           >
             <div>
@@ -166,11 +166,13 @@ export default {
         this.coords = await this.getCurrentLocation();
 
         // Features
-        this.features = await api.getStops({
+        const features = await api.getStops({
           lat: this.lat,
           lon: this.lon,
           // operated_by: "f-dnh-marta"
         });
+
+        this.features = Object.freeze(features);
 
         // Stop name and ID
         this.stops = await this.features.stops.map(f => {
@@ -204,7 +206,7 @@ export default {
         return times.push(a);
       });
 
-      this.times = await Promise.all(times);
+      this.times = Object.freeze(await Promise.all(times));
     },
   },
 };
