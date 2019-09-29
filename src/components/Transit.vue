@@ -10,7 +10,7 @@
         <template v-for="(stop, index) in stops">
           <article
             v-if="times[index].schedule_stop_pairs.length"
-            :key="stop.id"
+            :key="stop.name"
             class="row"
           >
             <div>
@@ -176,7 +176,6 @@ export default {
         this.stops = await this.features.stops.map(f => {
           const s = {
             coordinates: f.geometry.coordinates,
-            id: f.id,
             name: f.name,
             route_name: f.routes_serving_stop[0].route_name,
             route_onestop_id: f.routes_serving_stop[0].route_onestop_id,
