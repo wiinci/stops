@@ -218,7 +218,6 @@ export default {
 
 .row {
   display: flex;
-  justify-content: space-between;
   padding: 2rem 0;
 
   + .row {
@@ -226,10 +225,9 @@ export default {
   }
 }
 
-.slat {
-  + .slat {
-    margin: 0 0 0 2rem;
-  }
+.arriving {
+  margin-left: auto;
+  text-align: right;
 }
 
 .caption {
@@ -237,7 +235,7 @@ export default {
   #type.monospace();
   font-style: normal;
 
-  @media only screen and (max-width: 510px) {
+  @media only screen and (max-width: 640px) {
     #type.body();
   }
 }
@@ -248,9 +246,5 @@ export default {
   display: block;
   font-weight: 600;
   letter-spacing: 0.02rem;
-}
-
-.arriving {
-  text-align: right;
 }
 </style>

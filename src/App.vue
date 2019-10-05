@@ -60,7 +60,6 @@ html {
 }
 
 main {
-  flex: 1;
   margin: 0 auto;
   max-width: 90vw;
   padding: 1vmax;

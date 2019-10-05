@@ -27,9 +27,9 @@ footer {
   #type.small();
   background: #color.extended[yellow];
   color: #color.text[dark];
+  margin-top: auto;
   opacity: 0.7;
   padding: 0.5rem;
-  text-align: center;
 
   a {
     color: #color.text[dark];
@@ -40,7 +40,8 @@ ul {
   display: flex;
   flex-flow: row wrap;
   flex: 1;
-  justify-content: space-around;
+  justify-content: space-between;
   list-style-type: none;
+  padding: 0.5rem;
 }
 </style>
