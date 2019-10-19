@@ -5,53 +5,51 @@
 
   <section v-else>
     <div v-if="isLoading">Loading …</div>
-    <template v-else>
-      <template v-if="hasTime">
-        <template v-for="(stop, index) in stops">
-          <article
-            v-if="times[index].schedule_stop_pairs.length"
-            :key="stop.name + index"
-            class="row"
-          >
-            <div>
-              <p class="small-meta">
-                Route {{ stop.route_name }} &rarr;
-                {{
-                  titleCase(
-                    times[index].schedule_stop_pairs[0].trip_headsign
-                      .split(/(\d+) -*/)
-                      .pop()
-                      .trim()
-                      .toUpperCase()
-                  )
-                }}
-              </p>
-              <address class="caption station">
-                {{
-                  stop.name
-                    .split('@')
-                    .join(' & ')
+    <template v-if="hasTime">
+      <template v-for="(stop, index) in stops">
+        <article
+          v-if="times[index].schedule_stop_pairs.length"
+          :key="stop.name + index"
+          class="row"
+        >
+          <div>
+            <p class="small-meta">
+              Route {{ stop.route_name }} &rarr;
+              {{
+                titleCase(
+                  times[index].schedule_stop_pairs[0].trip_headsign
+                    .split(/(\d+) -*/)
+                    .pop()
                     .trim()
-                }}
-              </address>
-            </div>
-            <div class="arriving">
-              <p class="small-meta">Arriving</p>
-              <time
-                :datetime="
+                    .toUpperCase()
+                )
+              }}
+            </p>
+            <address class="caption station">
+              {{
+                stop.name
+                  .split('@')
+                  .join(' & ')
+                  .trim()
+              }}
+            </address>
+          </div>
+          <div class="arriving">
+            <p class="small-meta">Arriving</p>
+            <time
+              :datetime="
+                times[index].schedule_stop_pairs[0].origin_arrival_time
+              "
+              class="caption"
+            >
+              {{
+                getMinutes(
                   times[index].schedule_stop_pairs[0].origin_arrival_time
-                "
-                class="caption"
-              >
-                {{
-                  getMinutes(
-                    times[index].schedule_stop_pairs[0].origin_arrival_time
-                  )
-                }}
-              </time>
-            </div>
-          </article>
-        </template>
+                )
+              }}
+            </time>
+          </div>
+        </article>
       </template>
     </template>
     <Footer />
