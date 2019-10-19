@@ -62,7 +62,6 @@ html {
 main {
   margin: 0 auto;
   max-width: 90vw;
-  padding: 1vmax;
   width: 90ch;
 }
 

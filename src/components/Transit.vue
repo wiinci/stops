@@ -246,5 +246,10 @@ export default {
   display: block;
   font-weight: 600;
   letter-spacing: 0.02rem;
+
+  @media only screen and (max-width: 640px) {
+    letter-spacing: none;
+    #type.small();
+  }
 }
 </style>
