@@ -5,7 +5,7 @@
       v-for="(headsign, index) in headsigns"
       :key="headsign"
     >
-      <li>{{ stopTimes[index][0].routeName }} {{ headsign }}
+      <li>{{ getHeadsignWithRoute(headsign, index) }}
         <ul>
           <li
             v-for="stop in stopTimes[index]"
@@ -41,5 +41,23 @@ export default {
       return Object.values(this.times);
     }
   },
+  methods: {
+    getHeadsignWithRoute(destination, index) {
+      const name = this.stopTimes[index][0].routeName;
+      let sign = destination.toLowerCase();
+
+      // Train
+      if (sign.includes('bound')) {
+        const [route, headsign] = sign.split('to');
+        return `${route.split(' ').map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(' ')} → ${headsign.toUpperCase()}`;
+      }
+
+      // Bus
+      if (sign.includes('route')) {
+        sign = sign.split(/\w+\s\d+-/g)[1].trim();
+      }
+      return `Route ${name} → ${sign.toUpperCase()}`;
+    }
+  }
 };
 </script>
