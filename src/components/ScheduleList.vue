@@ -54,7 +54,7 @@ export default {
 
       // Bus
       if (sign.includes('route')) {
-        sign = sign.split(/\w+\s\d+-/g)[1].trim();
+        sign = sign.split(/\w+\s\d+\s*-/g)[1].trim();
       }
       return `Route ${name} → ${sign.toUpperCase()}`;
     }
