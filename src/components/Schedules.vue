@@ -1,15 +1,16 @@
 <template>
-  <div>
-    <pre>{{ fields }}</pre>
-    <pre>{{ times }}</pre>
-  </div>
+  <ScheduleList :times="times" />
 </template>
 
 <script>
 import api from '@/api';
+import ScheduleList from '@/components/ScheduleList';
 
 export default {
   name: 'Schedules',
+  components: {
+    ScheduleList
+  },
   props: {
     fields: {
       type: Object,
@@ -19,7 +20,7 @@ export default {
   data() {
     return {
       stops: [],
-      times: [],
+      times: {},
     };
   },
   watch: {
@@ -74,29 +75,37 @@ export default {
           const y = {};
           Object.assign(y, {
             // Arrival time at nearby stop
-            origin_arrival_time: x.origin_arrival_time,
+            arrivalTime: x.origin_arrival_time,
             // Destination stop name
-            trip_headsign: x.trip_headsign
+            headsign: x.trip_headsign
               .split(/(\d+) -*/)
               .pop()
               .trim()
               .toUpperCase(),
+            // Route name
+            routeName: this.stops
+              .filter(z => z.onestop_id === x.origin_onestop_id)
+              .map(k => k.routes_serving_stop[0].route_name)
+              .toString()
+              .trim(),
+            // Unique stop id
+            stopId: x.origin_onestop_id,
             // Nearby stop name
-            stop_name: this.stops
+            stopName: this.stops
               .filter(z => z.onestop_id === x.origin_onestop_id)
               .map(k => k.name)
               .toString()
               .replace('@', '&')
-              .trim()
+              .trim(),
           });
           return y;
         })
         // Create nested groups based on the final destination (headsign)
         .reduce((x, el) => {
-          const y = x[el.trip_headsign] || [];
+          const y = x[el.headsign] || [];
           y.push(el);
           // eslint-disable-next-line no-param-reassign
-          x[el.trip_headsign] = y;
+          x[el.headsign] = y;
           return x;
         }, {});
 
