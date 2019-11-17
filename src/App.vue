@@ -1,6 +1,7 @@
 <template>
   <div class="root">
     <main id="app">
+      <p>{{ today }}</p>
       <router-view />
     </main>
     <Footer />
@@ -13,6 +14,20 @@ import Footer from '@/components/Footer';
 export default {
   name: 'App',
   components: { Footer },
+  computed: {
+    today() {
+      const today = new Date();
+      const options = {
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        month: 'long',
+        weekday: 'long',
+        year: 'numeric',
+      };
+      return today.toLocaleTimeString('default', options);
+    }
+  }
 };
 </script>
 
