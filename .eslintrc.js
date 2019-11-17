@@ -74,7 +74,7 @@ module.exports = {
 
     // Vue settings
     'vue/html-indent': [
-      'warn',
+      2,
       2,
       {
         attribute: 1,
@@ -94,10 +94,22 @@ module.exports = {
       },
     ],
     'vue/html-closing-bracket-newline': [
-      'error',
+      1,
       {
         singleline: 'never',
         multiline: 'always',
+      },
+    ],
+    'vue/html-self-closing': [
+      'warn',
+      {
+        html: {
+          void: 'always',
+          normal: 'always',
+          component: 'always',
+        },
+        svg: 'always',
+        math: 'always',
       },
     ],
   },
