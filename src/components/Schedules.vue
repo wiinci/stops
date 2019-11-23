@@ -9,7 +9,7 @@ import ScheduleList from '@/components/ScheduleList';
 export default {
   name: 'Schedules',
   components: {
-    ScheduleList
+    ScheduleList,
   },
   props: {
     fields: {

@@ -1,11 +1,14 @@
 <template>
-  <div>
-    <p v-if="isEmptySchedule">Nothing scheduled within the next 20 minutes. Please try again later.</p>
+  <article>
+    <p v-if="isEmptySchedule">
+      Nothing scheduled within the next 20 minutes. Please try again later.
+    </p>
     <ul
       v-for="(headsign, index) in headsigns"
       :key="headsign"
     >
-      <li>{{ getHeadsignWithRoute(headsign, index) }}
+      <li>
+        {{ getHeadsignWithRoute(headsign, index) }}
         <ul>
           <li
             v-for="stop in stopTimes[index]"
@@ -18,7 +21,7 @@
         </ul>
       </li>
     </ul>
-  </div>
+  </article>
 </template>
 
 <script>
@@ -28,7 +31,7 @@ export default {
     times: {
       type: Object,
       required: true,
-    }
+    },
   },
   computed: {
     isEmptySchedule() {
@@ -39,7 +42,7 @@ export default {
     },
     stopTimes() {
       return Object.values(this.times);
-    }
+    },
   },
   methods: {
     getHeadsignWithRoute(destination, index) {
@@ -49,7 +52,10 @@ export default {
       // Train
       if (sign.includes('bound')) {
         const [route, headsign] = sign.split('to');
-        return `${route.split(' ').map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(' ')} → ${headsign.toUpperCase()}`;
+        return `${route
+          .split(' ')
+          .map(n => n.charAt(0).toUpperCase() + n.slice(1))
+          .join(' ')} → ${headsign.toUpperCase()}`;
       }
 
       // Bus
@@ -57,7 +63,7 @@ export default {
         sign = sign.split(/\w+\s\d+\s*-/g)[1].trim();
       }
       return `Route ${name} → ${sign.toUpperCase()}`;
-    }
-  }
+    },
+  },
 };
 </script>
