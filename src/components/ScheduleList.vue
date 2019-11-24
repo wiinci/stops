@@ -14,9 +14,8 @@
             v-for="stop in stopTimes[index]"
             :key="stop.stopId"
           >
-            <p>arrival: {{ stop.arrivalTime }}</p>
-            <p>arrival: {{ stop.routeName }}</p>
-            <p>arrival: {{ stop.stopName }}</p>
+            <p>{{ stop.arrivalTime }}</p>
+            <p>{{ stop.stopName }}</p>
           </li>
         </ul>
       </li>
