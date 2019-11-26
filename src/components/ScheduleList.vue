@@ -7,7 +7,7 @@
     >
       <article>
         <h1 class="stop-name">{{ toSentenceCase(stop) }}</h1>
-        <ul class="route">
+        <ul class="routes">
           <li
             v-for="route in stopTimes[index]"
             :key="route.arrivalTime"
