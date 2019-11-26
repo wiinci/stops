@@ -1,5 +1,5 @@
 <template>
-  <ScheduleList :times="times" />
+  <ScheduleList :routes="routes" />
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       stops: [],
-      times: {},
+      routes: {},
     };
   },
   watch: {
@@ -100,17 +100,17 @@ export default {
           });
           return y;
         })
-        // Create nested groups based on the final destination (headsign)
+        // Create nested groups based on nearby stops
         .reduce((x, el) => {
-          const y = x[el.headsign] || [];
+          const y = x[el.stopName] || [];
           y.push(el);
           // eslint-disable-next-line no-param-reassign
-          x[el.headsign] = y;
+          x[el.stopName] = y;
           return x;
         }, {});
 
-      this.times = Object.freeze(schedules);
-      console.log(this.times);
+      this.routes = Object.freeze(schedules);
+      console.log(this.routes);
     },
   },
 };
