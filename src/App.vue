@@ -1,8 +1,13 @@
 <template>
   <div class="root">
     <main id="app">
-      <p>{{ today }}</p>
-      <router-view />
+      <aside>
+        <p>{{ today }}</p>
+      </aside>
+      <!-- REAL -->
+      <section>
+        <router-view />
+      </section>
     </main>
     <Footer />
   </div>
@@ -26,8 +31,8 @@ export default {
         year: 'numeric',
       };
       return today.toLocaleTimeString('default', options);
-    }
-  }
+    },
+  },
 };
 </script>
 
