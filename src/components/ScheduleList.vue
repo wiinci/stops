@@ -127,4 +127,43 @@ export default {
 <style lang="less">
 @import (reference) '../assets/styles/variables/global.less';
 @import (reference) '../assets/styles/bundles/typography.less';
+
+.stops,
+.routes {
+  list-style-type: none;
+}
+
+.stop-details {
+  + .stop-details {
+    margin-top: @base-unit * 6;
+  }
+}
+
+.stop-name {
+  #type.h3();
+  background-color: @background;
+  box-shadow: 0 2px darken(@default-copy, 65%);
+  margin-bottom: @base-unit * 2;
+  padding: @base-unit * 2 0;
+  position: sticky;
+  top: 0;
+}
+
+.route-details {
+  display: flex;
+  padding: @base-unit * 2 0;
+}
+
+.badge {
+  #type.small();
+  border-radius: @base-unit * 2;
+  border: 1px solid currentColor;
+  letter-spacing: 0.03rem;
+  margin-right: @base-unit * 2;
+  padding: 0 @base-unit * 2;
+}
+
+.arrivalTime {
+  margin-left: auto;
+}
 </style>
