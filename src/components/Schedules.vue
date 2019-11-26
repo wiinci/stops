@@ -1,5 +1,8 @@
 <template>
-  <ScheduleList :routes="routes" />
+  <div>
+    <p v-if="isLoading">Loading …</p>
+    <ScheduleList :routes="routes" />
+  </div>
 </template>
 
 <script>
@@ -19,6 +22,7 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
       stops: [],
       routes: {},
     };
@@ -34,6 +38,7 @@ export default {
   },
   methods: {
     async getStops() {
+      this.isLoading = false;
       const { latitude, longitude } = this.fields;
       const features = await api.getStops({ lat: latitude, lon: longitude });
       const stops = await features.stops;

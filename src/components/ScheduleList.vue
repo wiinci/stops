@@ -1,32 +1,44 @@
 <template>
-  <article>
-    <p v-if="isEmptySchedule">
-      Nothing scheduled within the next 20 minutes. Please try again later.
-    </p>
-    <ul
+  <ul class="stops">
+    <li
       v-for="(stop, index) in stops"
       :key="stop"
-      class="stop"
+      class="stop-details"
     >
-      <li class="stop-details">
-        <p class="stop-name">{{ toSentenceCase(stop) }}</p>
+      <article>
+        <h1 class="stop-name">{{ toSentenceCase(stop) }}</h1>
         <ul class="route">
           <li
             v-for="route in stopTimes[index]"
             :key="route.arrivalTime"
             class="route-details"
           >
-            <p class="type">{{ getHeadsignWithRoute(route.headsign, route.routeName)['type'] }}</p>
-            <p class="route">{{ getHeadsignWithRoute(route.headsign, route.routeName)['route'] }}</p>
-            <p class="headsign">{{ getHeadsignWithRoute(route.headsign, route.routeName)['sign'] }}</p>
-            <time :datetime="route.arrivalTime">{{
+            <p class="type">
+              {{
+                getHeadsignWithRoute(route.headsign, route.routeName)['type']
+              }}
+            </p>
+            <p class="badge">
+              {{
+                getHeadsignWithRoute(route.headsign, route.routeName)['route']
+              }}
+            </p>
+            <p class="headsign">
+              {{
+                getHeadsignWithRoute(route.headsign, route.routeName)['sign']
+              }}
+            </p>
+            <time
+              :datetime="route.arrivalTime"
+              class="arrivalTime"
+            >{{
               getMinutes(route.arrivalTime)
             }}</time>
           </li>
         </ul>
-      </li>
-    </ul>
-  </article>
+      </article>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -39,9 +51,6 @@ export default {
     },
   },
   computed: {
-    isEmptySchedule() {
-      return Object.keys(this.routes).length === 0;
-    },
     stops() {
       return Object.keys(this.routes);
     },
@@ -49,11 +58,12 @@ export default {
       return Object.values(this.routes);
     },
     toSentenceCase() {
-      return str => str
-        .trim()
-        .split(' ')
-        .map(n => n.charAt(0).toUpperCase() + n.slice(1))
-        .join(' ');
+      return str =>
+        str
+          .trim()
+          .split(' ')
+          .map(n => n.charAt(0).toUpperCase() + n.slice(1))
+          .join(' ');
     },
     getMinutes() {
       return timeStr => {
@@ -64,7 +74,7 @@ export default {
         time.setSeconds(timeStr.split(':')[2]);
         const minutes = Math.floor((time - now) / (60 * 1000));
         return minutes <= 1
-          ? 'Any minute now'
+          ? 'Less than a minute'
           : minutes <= 0
             ? 'At the stop!'
             : `${minutes} min.`;
@@ -117,5 +127,4 @@ export default {
 <style lang="less">
 @import (reference) '../assets/styles/variables/global.less';
 @import (reference) '../assets/styles/bundles/typography.less';
-
 </style>
