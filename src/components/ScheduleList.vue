@@ -13,11 +13,11 @@
             :key="route.arrivalTime"
             class="route-details"
           >
-            <p class="type">
+            <!-- <p class="type">
               {{
                 getHeadsignWithRoute(route.headsign, route.routeName)['type']
               }}
-            </p>
+            </p> -->
             <p class="badge">
               {{
                 getHeadsignWithRoute(route.headsign, route.routeName)['route']
