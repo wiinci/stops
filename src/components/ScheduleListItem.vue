@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     toSentenceCase(str) {
-      console.log(this.routes);
       return str
         .trim()
         .split(' ')
