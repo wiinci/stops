@@ -1,6 +1,9 @@
 <template>
   <div>
     <p v-if="isLoading">Loading …</p>
+    <p v-if="isEmpty">
+      Nothing scheduled in the next 20 minutes. Please try again later.
+    </p>
     <ScheduleList :routes="routes" />
   </div>
 </template>
@@ -22,9 +25,10 @@ export default {
   },
   data() {
     return {
+      isEmpty: false,
       isLoading: true,
-      stops: [],
       routes: {},
+      stops: [],
     };
   },
   watch: {
@@ -38,7 +42,6 @@ export default {
   },
   methods: {
     async getStops() {
-      this.isLoading = false;
       const { latitude, longitude } = this.fields;
       const features = await api.getStops({ lat: latitude, lon: longitude });
       const stops = await features.stops;
@@ -93,8 +96,6 @@ export default {
               .map(k => k.routes_serving_stop[0].route_name)
               .toString()
               .trim(),
-            // Unique stop id
-            stopId: x.origin_onestop_id,
             // Nearby stop name
             stopName: this.stops
               .filter(z => z.onestop_id === x.origin_onestop_id)
@@ -115,6 +116,8 @@ export default {
         }, {});
 
       this.routes = Object.freeze(schedules);
+      this.isLoading = false;
+      this.isEmpty = Object.keys(this.routes).length < 1;
       console.log(this.routes);
     },
   },
