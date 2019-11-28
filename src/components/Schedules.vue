@@ -101,7 +101,8 @@ export default {
               .filter(z => z.onestop_id === x.origin_onestop_id)
               .map(k => k.name)
               .toString()
-              .replace('@', '&')
+              .replace('@', ' & ')
+              .replace(/\s+/g, ' ')
               .trim(),
           });
           return y;
