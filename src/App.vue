@@ -1,13 +1,10 @@
 <template>
   <div class="root">
     <main id="app">
-      <aside>
-        <p>{{ today }}</p>
-      </aside>
-      <!-- REAL -->
       <section>
         <router-view />
       </section>
+      <Sidebar />
     </main>
     <Footer />
   </div>
@@ -15,24 +12,11 @@
 
 <script>
 import Footer from '@/components/Footer';
+import Sidebar from '@/components/Sidebar';
 
 export default {
   name: 'App',
-  components: { Footer },
-  computed: {
-    today() {
-      const today = new Date();
-      const options = {
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        month: 'long',
-        weekday: 'long',
-        year: 'numeric',
-      };
-      return today.toLocaleTimeString('default', options);
-    },
-  },
+  components: { Footer, Sidebar },
 };
 </script>
 
@@ -80,9 +64,10 @@ html {
 }
 
 main {
-  margin: 0 auto;
-  max-width: 90vw;
-  width: 90ch;
+  display: grid;
+  grid-gap: 3ch;
+  grid-template-columns: 60ch 35ch;
+  margin: @base-unit * 6 auto;
 }
 
 ::selection {
