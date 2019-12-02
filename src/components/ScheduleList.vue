@@ -2,8 +2,8 @@
   <ul class="stops">
     <ScheduleListItem
       v-for="(stop, index) in stops"
-      :index="index"
       :key="stop"
+      :index="index"
       :routes="stopTimes"
       :stop="stop"
     />

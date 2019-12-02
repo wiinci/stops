@@ -1,7 +1,9 @@
 <template>
   <li class="stop-details">
     <article>
-      <h1 class="stop-name">{{ toSentenceCase(stop) }}</h1>
+      <h1 class="stop-name">
+        {{ toSentenceCase(stop) }}
+      </h1>
       <ul class="routes">
         <RouteListItem
           v-for="route in routes[index]"

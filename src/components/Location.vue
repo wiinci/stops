@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p v-if="isLoading">Loading …</p>
+    <p v-if="isLoading">
+      Loading …
+    </p>
     <Schedules
       v-else
       :fields="fields"

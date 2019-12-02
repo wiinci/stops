@@ -1,7 +1,11 @@
 <template>
   <li class="route-details">
-    <p class="badge">{{ routeDetails['route'] }}</p>
-    <p class="headsign">{{ routeDetails['sign'] }}</p>
+    <p class="badge">
+      {{ routeDetails['route'] }}
+    </p>
+    <p class="headsign">
+      {{ routeDetails['sign'] }}
+    </p>
     <time
       :datetime="route.arrivalTime"
       class="arrivalTime"
@@ -22,7 +26,7 @@ export default {
     routeDetails: {
       type: Object,
       required: true,
-    }
+    },
   },
   methods: {
     getMinutes(timeStr) {
@@ -38,7 +42,7 @@ export default {
           ? 'At the stop!'
           : `${minutes} min.`;
     },
-  }
+  },
 };
 </script>
 
@@ -62,5 +66,6 @@ export default {
 
 .arrivalTime {
   margin-left: auto;
+  text-align: right;
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p v-if="isLoading">Loading …</p>
+    <p v-if="isLoading">
+      Loading …
+    </p>
     <p v-if="isEmpty">
       Nothing scheduled in the next 20 minutes. Please try again later.
     </p>
