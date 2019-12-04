@@ -38,7 +38,7 @@ export default {
   },
 
   getAqi() {
-    return this.execute('get', aqi, { aqiParams });
+    return this.execute('get', aqi, { ...aqiParams });
   },
 
   getAqifromLatLon({ lat, lon }) {
