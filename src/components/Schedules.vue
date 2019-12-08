@@ -1,23 +1,28 @@
 <template>
-  <div>
-    <p v-if="isLoading">
-      Loading …
-    </p>
-    <p v-if="isEmpty">
-      Nothing scheduled in the next 20 minutes. Please try again later.
-    </p>
-    <ScheduleList :routes="routes" />
+  <div class="grid">
+    <section>
+      <p v-if="isLoading">
+        Loading …
+      </p>
+      <p v-if="isEmpty">
+        Nothing scheduled in the next 20 minutes. Please try again later.
+      </p>
+      <ScheduleList :routes="routes" />
+    </section>
+    <Sidebar />
   </div>
 </template>
 
 <script>
 import api from '@/api';
 import ScheduleList from '@/components/ScheduleList';
+import Sidebar from '@/components/Sidebar';
 
 export default {
   name: 'Schedules',
   components: {
     ScheduleList,
+    Sidebar,
   },
   props: {
     fields: {
@@ -126,3 +131,11 @@ export default {
   },
 };
 </script>
+
+<style lang="less" scoped>
+.grid {
+  display: grid;
+  grid-gap: 3ch;
+  grid-template-columns: 60ch 35ch;
+}
+</style>

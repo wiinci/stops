@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <p v-if="isLoading">
       Loading …
     </p>
@@ -7,7 +7,7 @@
       v-else
       :fields="fields"
     />
-  </div>
+  </main>
 </template>
 
 <script>

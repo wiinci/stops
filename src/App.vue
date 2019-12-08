@@ -1,22 +1,16 @@
 <template>
   <div class="root">
-    <main id="app">
-      <section>
-        <router-view />
-      </section>
-      <Sidebar />
-    </main>
+    <router-view />
     <Footer />
   </div>
 </template>
 
 <script>
 import Footer from '@/components/Footer';
-import Sidebar from '@/components/Sidebar';
 
 export default {
   name: 'App',
-  components: { Footer, Sidebar },
+  components: { Footer },
 };
 </script>
 
@@ -64,9 +58,6 @@ html {
 }
 
 main {
-  display: grid;
-  grid-gap: 3ch;
-  grid-template-columns: 60ch 35ch;
   margin: @base-unit * 6 auto;
 }
 
