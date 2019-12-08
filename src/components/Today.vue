@@ -21,12 +21,3 @@ export default {
   },
 };
 </script>
-
-<style lang="less" scoped>
-@import (reference) '../assets/styles/variables/global.less';
-@import (reference) '../assets/styles/bundles/typography.less';
-
-p {
-  #type.small();
-}
-</style>

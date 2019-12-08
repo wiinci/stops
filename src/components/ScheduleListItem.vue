@@ -87,6 +87,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import (reference) '../assets/styles/bundles/colors.less';
 @import (reference) '../assets/styles/variables/global.less';
 @import (reference) '../assets/styles/bundles/typography.less';
 
@@ -103,7 +104,7 @@ export default {
 .stop-name {
   #type.h3();
   background-color: @background;
-  box-shadow: 0 2px darken(@default-copy, 65%);
+  box-shadow: 0 2px fade(#color.text[light], 20%);
   margin-bottom: @base-unit * 2;
   padding: @base-unit * 2 0;
   position: sticky;
