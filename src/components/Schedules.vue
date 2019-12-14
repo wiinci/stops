@@ -5,7 +5,7 @@
         Loading …
       </p>
       <p v-if="isEmpty">
-        Nothing scheduled in the next 20 minutes. Please try again later.
+        Nothing scheduled in the next 20 minutes.<br />Please try again later.
       </p>
       <ScheduleList :routes="routes" />
     </section>
