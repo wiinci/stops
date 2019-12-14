@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <router-view />
+    <router-view :key="$route.fullPath" />
     <Footer />
   </div>
 </template>

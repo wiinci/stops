@@ -136,6 +136,6 @@ export default {
 .grid {
   display: grid;
   grid-gap: 3ch;
-  grid-template-columns: 60ch 35ch;
+  grid-template-columns: 60ch 40ch;
 }
 </style>
