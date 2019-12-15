@@ -105,7 +105,7 @@ export default {
 .stop-name {
   #type.h3();
   background-color: @background;
-  box-shadow: 0 2px fade(@text[light], 20%);
+  box-shadow: 0 1px fade(@text[light], 20%);
   margin-bottom: @base-unit * 2;
   padding: @base-unit * 2 0;
   position: sticky;
