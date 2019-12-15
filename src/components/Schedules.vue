@@ -135,7 +135,7 @@ export default {
 <style lang="less" scoped>
 .grid {
   display: grid;
-  grid-gap: 3ch;
+  grid-gap: 4ch;
   grid-template-columns: 60ch 40ch;
 }
 </style>
