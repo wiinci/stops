@@ -2,7 +2,7 @@
   <li class="stop-details">
     <article>
       <h1 class="stop-name">
-        {{ toSentenceCase(stop) }}
+        {{ sentenceCase(stop) }}
       </h1>
       <ul class="routes">
         <RouteListItem
@@ -18,6 +18,7 @@
 
 <script>
 import RouteListItem from '@/components/RouteListItem';
+import sentenceCase from '@/fn/sentenceCase';
 
 export default {
   name: 'ScheduleListItem',
@@ -37,13 +38,6 @@ export default {
     },
   },
   methods: {
-    toSentenceCase(str) {
-      return str
-        .trim()
-        .split(' ')
-        .map(n => n.charAt(0).toUpperCase() + n.slice(1))
-        .join(' ');
-    },
     getHeadsignWithRoute(destination, routeName) {
       const name = routeName;
       let sign = destination.toLowerCase();
@@ -53,7 +47,7 @@ export default {
         // eslint-disable-next-line
         let [route, headsign] = sign.split('to');
 
-        route = `${this.toSentenceCase(route)}`;
+        route = `${sentenceCase(route)}`;
 
         if (route.includes('East')) {
           route = route.replace(' ', ' → ');
@@ -67,7 +61,7 @@ export default {
 
         return {
           route: `${route}`,
-          sign: `${this.toSentenceCase(headsign)}`,
+          sign: `${sentenceCase(headsign)}`,
           type: 'train',
         };
       }
@@ -78,7 +72,7 @@ export default {
       }
       return {
         route: `Route ${name}`,
-        sign: `${this.toSentenceCase(sign)}`,
+        sign: `${sentenceCase(sign)}`,
         type: 'bus',
       };
     },
