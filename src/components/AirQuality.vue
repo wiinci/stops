@@ -1,40 +1,38 @@
 <template>
-  <div>
+  <article>
     <address v-if="aqi">
       {{ aqi.city }}, {{ aqi.state }}
     </address>
-    <article>
-      <dl>
-        <div class="dl-row">
-          <dt>Current weather</dt>
-          <dd>{{ weather.sky }}</dd>
-        </div>
-        <div class="dl-row">
-          <dt>Air quality</dt>
-          <dd
-            v-if="aqiIndex"
-            class="aqi-badge"
-            :class="aqiIndex.color"
-            :title="'PM2.5 = ' + aqi.current.pollution.aqius"
-          >
-            {{ aqiIndex.condition }}
-          </dd>
-        </div>
-        <div class="dl-row">
-          <dt>Temperature</dt>
-          <dd>{{ weather.farenheit }}&deg;F / {{ weather.celsius }}&deg;C</dd>
-        </div>
-        <div class="dl-row">
-          <dt>Humidity</dt>
-          <dd>{{ weather.humidity }}%</dd>
-        </div>
-        <div class="dl-row">
-          <dt>Wind</dt>
-          <dd>{{ weather.winddirection }} {{ weather.windspeed }} mph</dd>
-        </div>
-      </dl>
-    </article>
-  </div>
+    <dl>
+      <div class="dl-row">
+        <dt>Current weather</dt>
+        <dd>{{ weather.sky }}</dd>
+      </div>
+      <div class="dl-row">
+        <dt>Air quality</dt>
+        <dd
+          v-if="aqiIndex"
+          class="aqi-badge"
+          :class="aqiIndex.color"
+          :title="'PM2.5 = ' + aqi.current.pollution.aqius"
+        >
+          {{ aqiIndex.condition }}
+        </dd>
+      </div>
+      <div class="dl-row">
+        <dt>Temperature</dt>
+        <dd>{{ weather.farenheit }}&deg;F / {{ weather.celsius }}&deg;C</dd>
+      </div>
+      <div class="dl-row">
+        <dt>Humidity</dt>
+        <dd>{{ weather.humidity }}%</dd>
+      </div>
+      <div class="dl-row">
+        <dt>Wind</dt>
+        <dd>{{ weather.winddirection }} {{ weather.windspeed }} mph</dd>
+      </div>
+    </dl>
+  </article>
 </template>
 
 <script>
