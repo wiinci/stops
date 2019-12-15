@@ -9,12 +9,12 @@
         <div class="dl-row">
           <dt>Air quality</dt>
           <dd
-            v-if="category"
+            v-if="aqiIndex"
             class="aqi-badge"
-            :class="category[0].color"
+            :class="aqiIndex.color"
             :title="'PM2.5 = ' + aqi.current.pollution.aqius"
           >
-            {{ category[0].condition }}
+            {{ aqiIndex.condition }}
           </dd>
         </div>
         <div class="dl-row">
@@ -36,19 +36,24 @@
 
 <script>
 import api from '@/api';
+import aqiIndex from '@/fn/aqiIndex';
+import cToF from '@/fn/cToF';
+import mpsToMph from '@/fn/mpsToMph';
+import skyCondition from '@/fn/skyCondition';
+import windDirection from '@/fn/windDirection';
 
 export default {
   name: 'AirQuality',
   data() {
     return {
       aqi: null,
-      category: null,
+      aqiIndex: null,
       weather: {},
     };
   },
   watch: {
     aqi: {
-      handler: 'getAqiIndex',
+      handler: 'getAirAndWeather',
     },
   },
   mounted() {
@@ -60,123 +65,17 @@ export default {
       const data = await res.data;
       this.aqi = Object.freeze(data);
     },
-    getCtoF(celsius) {
-      return Math.round((celsius * 9) / 5 + 32);
-    },
-    getDirection(angle, directions) {
-      switch (angle) {
-      case 0:
-      case 360:
-        return 'N';
-      case 90:
-        return 'E';
-      case 180:
-        return 'S';
-      case 270:
-        return 'W';
-      default:
-        return directions.filter(
-          d => angle > d.angleMin && angle < d.angleMax
-        )[0].direction;
-      }
-    },
-    getMph(mps) {
-      return Math.round(mps * 2.237);
-    },
-    getAqiIndex() {
-      const categories = [
-        {
-          color: 'green',
-          condition: 'Good',
-          rangeMax: 50,
-          rangeMin: 0,
-        },
-        {
-          color: 'yellow',
-          condition: 'Moderate',
-          rangeMax: 100,
-          rangeMin: 51,
-        },
-        {
-          color: 'orange',
-          condition: 'Unhealty for sensitive groups',
-          rangeMax: 150,
-          rangeMin: 101,
-        },
-        {
-          color: 'red',
-          condition: 'Unhealthy',
-          rangeMax: 200,
-          rangeMin: 151,
-        },
-        {
-          color: 'purple',
-          condition: 'Very unhealthy',
-          rangeMax: 300,
-          rangeMin: 201,
-        },
-        {
-          color: 'maroon',
-          condition: 'Hazardous',
-          rangeMax: Infinity,
-          rangeMin: 301,
-        },
-      ];
-
-      const skies = [
-        { identifier: '01d', condition: 'Clear' },
-        { identifier: '01n', condition: 'Clear' },
-        { identifier: '02d', condition: 'Partly cloudy' },
-        { identifier: '02n', condition: 'Partly cloudy' },
-        { identifier: '03d', condition: 'Cloudy' },
-        { identifier: '04d', condition: 'Mostly cloudy' },
-        { identifier: '09d', condition: 'Showers' },
-        { identifier: '10d', condition: 'Showers' },
-        { identifier: '10n', condition: 'Showers' },
-        { identifier: '11d', condition: 'Thunderstorms' },
-        { identifier: '13d', condition: 'Snow' },
-        { identifier: '50d', condition: 'Mist' },
-      ];
-
-      const directions = [
-        {
-          angleMin: 0,
-          angleMax: 90,
-          direction: 'NE',
-        },
-        {
-          angleMin: 90,
-          angleMax: 180,
-          direction: 'SE',
-        },
-        {
-          angleMin: 180,
-          angleMax: 270,
-          direction: 'SW',
-        },
-        {
-          angleMin: 270,
-          angleMax: 360,
-          direction: 'NW',
-        },
-      ];
-
-      const aqi = this.aqi.current;
-      const pollution = aqi.pollution.aqius;
-      this.weather.celsius = aqi.weather.tp;
-      this.weather.farenheit = this.getCtoF(aqi.weather.tp);
-      this.weather.humidity = aqi.weather.hu;
-      this.weather.windspeed = this.getMph(aqi.weather.ws);
-      this.weather.winddirection = this.getDirection(
-        aqi.weather.wd,
-        directions
-      );
-      this.weather.sky = skies.filter(
-        sky => aqi.weather.ic === sky.identifier
-      )[0].condition;
-      this.category = categories.filter(
-        category => pollution >= category.rangeMin && pollution < category.rangeMax
-      );
+    getAirAndWeather() {
+      const { current } = this.aqi;
+      this.aqiIndex = aqiIndex(current.pollution.aqius);
+      this.weather = {
+        celsius: current.weather.tp,
+        farenheit: cToF(current.weather.tp),
+        humidity: current.weather.hu,
+        sky: skyCondition(current.weather.ic),
+        winddirection: windDirection(current.weather.wd),
+        windspeed: mpsToMph(current.weather.ws),
+      };
     },
   },
 };
