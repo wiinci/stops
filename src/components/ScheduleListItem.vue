@@ -2,7 +2,7 @@
   <li class="stop-details">
     <article>
       <h1 class="stop-name">
-        {{ sentenceCase(stop) }}
+        {{ formatStop }}
       </h1>
       <ul class="routes">
         <RouteListItem
@@ -18,7 +18,7 @@
 
 <script>
 import RouteListItem from '@/components/RouteListItem';
-import sentenceCase from '@/fn/sentenceCase';
+import capitalize from '@/fn/capitalize';
 
 export default {
   name: 'ScheduleListItem',
@@ -37,6 +37,11 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      formatStop: capitalize(this.stop)
+    };
+  },
   methods: {
     getHeadsignWithRoute(destination, routeName) {
       const name = routeName;
@@ -47,7 +52,7 @@ export default {
         // eslint-disable-next-line
         let [route, headsign] = sign.split('to');
 
-        route = `${sentenceCase(route)}`;
+        route = `${capitalize(route)}`;
 
         if (route.includes('East')) {
           route = route.replace(' ', ' → ');
@@ -61,7 +66,7 @@ export default {
 
         return {
           route: `${route}`,
-          sign: `${sentenceCase(headsign)}`,
+          sign: `${capitalize(headsign)}`,
           type: 'train',
         };
       }
@@ -72,7 +77,7 @@ export default {
       }
       return {
         route: `Route ${name}`,
-        sign: `${sentenceCase(sign)}`,
+        sign: `${capitalize(sign)}`,
         type: 'bus',
       };
     },
