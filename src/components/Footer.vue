@@ -23,16 +23,19 @@ export default {
 @import (reference) '../assets/styles/bundles/colors.less';
 @import (reference) '../assets/styles/bundles/typography.less';
 
+@extended: #color.extended();
+@text: #color.text();
+
 footer {
   #type.small();
-  background: #color.extended[yellow];
-  color: #color.text[dark];
+  background: @extended[yellow];
+  color: @text[dark];
   margin-top: auto;
   opacity: 0.7;
   padding: 0.5rem;
 
   a {
-    color: #color.text[dark];
+    color: @text[dark];
   }
 }
 

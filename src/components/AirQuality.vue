@@ -96,6 +96,9 @@ export default {
 @import (reference) '../assets/styles/bundles/typography.less';
 @import (reference) '../assets/styles/variables/global.less';
 
+@aqi: #color.aqi();
+@text: #color.text();
+
 address {
   font-style: normal;
   margin-bottom: @base-unit * 4;
@@ -107,7 +110,7 @@ address {
   padding: @base-unit 0;
 
   + .dl-row {
-    border-top: 1px solid fade(#color.text[light], 20%);
+    border-top: 1px solid fade(@text[light], 20%);
   }
 }
 
@@ -122,32 +125,32 @@ dd {
 }
 
 .green {
-  color: contrast(#color.aqi[green], #color.text[dark], #color.text[light]);
-  background-color: #color.aqi[green];
+  color: contrast(@aqi[green], @text[dark], @text[light]);
+  background-color: @aqi[green];
 }
 
 .yellow {
-  color: contrast(#color.aqi[yellow], #color.text[dark], #color.text[light]);
-  background-color: #color.aqi[yellow];
+  color: contrast(@aqi[yellow], @text[dark], @text[light]);
+  background-color: @aqi[yellow];
 }
 
 .orange {
-  color: contrast(#color.aqi[orange], #color.text[dark], #color.text[light]);
-  background-color: #color.aqi[orange];
+  color: contrast(@aqi[orange], @text[dark], @text[light]);
+  background-color: @aqi[orange];
 }
 
 .red {
-  color: contrast(#color.aqi[red], #color.text[dark], #color.text[light]);
-  background-color: #color.aqi[red];
+  color: contrast(@aqi[red], @text[dark], @text[light]);
+  background-color: @aqi[red];
 }
 
 .purple {
-  color: contrast(#color.aqi[purple], #color.text[dark], #color.text[light]);
-  background-color: #color.aqi[purple];
+  color: contrast(@aqi[purple], @text[dark], @text[light]);
+  background-color: @aqi[purple];
 }
 
 .maroon {
-  color: contrast(#color.aqi[maroon], #color.text[dark], #color.text[light]);
-  background-color: #color.aqi[maroon];
+  color: contrast(@aqi[maroon], @text[dark], @text[light]);
+  background-color: @aqi[maroon];
 }
 </style>
