@@ -1,3 +1,10 @@
+/**
+ * AirVisual API weather icon index
+ * @type Object[]
+ * @constant
+ * @private
+ */
+
 const skies = [
   { identifier: '01d', condition: 'Clear' },
   { identifier: '01n', condition: 'Clear' },
@@ -18,6 +25,16 @@ const skies = [
   { identifier: '50d', condition: 'Mist' },
   { identifier: '50n', condition: 'Mist' },
 ];
+
+/**
+ * Obtain sky condition for a given weather data icon in AirVisual API
+ * @function
+ * @public
+ * @see https://api-docs.airvisual.com/?version=latest#detailed-response-example
+ *
+ * @param {String} icon
+ * @returns {String}
+ */
 
 export default function skyCondition(icon) {
   return skies.filter(sky => icon === sky.identifier)[0].condition;

@@ -1,3 +1,10 @@
+/**
+ * Directions and angles dictionary
+ * @type Object[]
+ * @constant
+ * @private
+ */
+
 const directions = [
   {
     angleMin: 0,
@@ -20,6 +27,16 @@ const directions = [
     direction: 'NW',
   },
 ];
+
+/**
+ * Obtain wind direction for a given angle
+ * @function
+ * @public
+ * @see https://api-docs.airvisual.com/?version=latest#detailed-response-example
+ *
+ * @param {Number} angle
+ * @returns {String}
+ */
 
 export default function windDirection(angle) {
   switch (angle) {

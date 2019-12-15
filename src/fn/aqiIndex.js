@@ -1,3 +1,10 @@
+/**
+ * Air Quality Index categories
+ * @type Object{}
+ * @constant
+ * @private
+ */
+
 const categories = [
   {
     color: 'green',
@@ -36,6 +43,15 @@ const categories = [
     rangeMin: 301,
   },
 ];
+
+/**
+ * Obtain AQI category for a given PM2.5 pollution value
+ * @function
+ * @public
+ *
+ * @param {Number} pollution
+ * @returns {Object}
+ */
 
 export default function aqiIndex(pollution) {
   return categories.filter(
