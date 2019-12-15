@@ -4,8 +4,11 @@
       {{ aqi.city }}, {{ aqi.state }}
     </address>
     <article>
-      <h1>Current weather <span class="primary-value">{{ weather.sky }}</span></h1>
       <dl>
+        <div class="dl-row">
+          <dt>Current weather</dt>
+          <dd>{{ weather.sky }}</dd>
+        </div>
         <div class="dl-row">
           <dt>Air quality</dt>
           <dd
@@ -88,26 +91,19 @@ export default {
 
 address {
   font-style: normal;
+  margin-bottom: @base-unit * 4;
 }
 
-h1 {
-  #type.small();
-  font-weight: normal;
-  margin: (@base-unit * 3) 0 @base-unit;
-  border-bottom: 1px solid fade(#color.text[light], 20%);
-}
-
-dl {
-  #type.small();
-}
-
-.dl-row,
-h1 {
+.dl-row {
   align-items: center;
   display: flex;
+  padding: @base-unit 0;
+
+  + .dl-row {
+    border-top: 1px solid fade(#color.text[light], 20%);
+  }
 }
 
-.primary-value,
 dd {
   margin-left: auto;
   text-align: right;
