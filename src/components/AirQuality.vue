@@ -47,6 +47,12 @@ import windDirection from '@/fn/windDirection';
 
 export default {
   name: 'AirQuality',
+  props: {
+    latlon: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       aqi: null,
@@ -64,7 +70,8 @@ export default {
   },
   methods: {
     async getAqi() {
-      const res = await api.getAqi();
+      const { latitude, longitude } = this.latlon;
+      const res = await api.getAqifromLatLon({ lat: latitude, lon: longitude });
       const data = await res.data;
       this.aqi = Object.freeze(data);
     },

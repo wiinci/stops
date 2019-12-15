@@ -9,7 +9,7 @@
       </p>
       <ScheduleList :routes="routes" />
     </section>
-    <Sidebar />
+    <Sidebar :latlon="fields" />
   </div>
 </template>
 

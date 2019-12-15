@@ -1,7 +1,7 @@
 <template>
   <aside>
     <Today />
-    <AirQuality />
+    <AirQuality :latlon="latlon" />
   </aside>
 </template>
 
@@ -12,5 +12,11 @@ import Today from '@/components/Today';
 export default {
   name: 'Sidebar',
   components: { AirQuality, Today },
+  props: {
+    latlon: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>
