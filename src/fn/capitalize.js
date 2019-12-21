@@ -11,6 +11,6 @@ export default function capitalize(str) {
   return str
     .trim()
     .split(' ')
-    .map(s => s.replace(s[0], s[0].toUpperCase()))
+    .map(s => s.trim() ? s.replace(s[0], s[0].toUpperCase()) : '')
     .join(' ');
 }
