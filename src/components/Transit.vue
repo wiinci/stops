@@ -1,10 +1,14 @@
 <template>
   <article v-if="hasError">
-    <h1 class="error">{{ errorMsg }}</h1>
+    <h1 class="error">
+      {{ errorMsg }}
+    </h1>
   </article>
 
   <section v-else>
-    <div v-if="isLoading">Loading …</div>
+    <div v-if="isLoading">
+      Loading …
+    </div>
     <template v-if="hasTime">
       <template v-for="(stop, index) in stops">
         <article
@@ -35,7 +39,9 @@
             </address>
           </div>
           <div class="arriving">
-            <p class="small-meta">Arriving</p>
+            <p class="small-meta">
+              Arriving
+            </p>
             <time
               :datetime="
                 times[index].schedule_stop_pairs[0].origin_arrival_time
@@ -98,10 +104,8 @@ export default {
         time.setSeconds(timeStr.split(':')[2]);
         const minutes = Math.floor((time - now) / (60 * 1000));
         return minutes <= 1
-          ? 'Any minute now'
-          : minutes <= 0
-            ? 'At the stop!'
-            : `${minutes} minutes`;
+          ? '< 1 minute'
+          : `${minutes} minutes`;
       };
     },
   },
@@ -121,16 +125,14 @@ export default {
       return text
         .toLowerCase()
         .split(' ')
-        .map(t =>
-          t.length > 2
-            ? t.includes('/')
-              ? t
-                .split('/')
-                .map(x => x.charAt(0).toUpperCase() + x.slice(1))
-                .join('/')
-              : t.charAt(0).toUpperCase() + t.slice(1)
-            : t.toUpperCase()
-        )
+        .map(t => t.length > 2
+          ? t.includes('/')
+            ? t
+              .split('/')
+              .map(x => x.charAt(0).toUpperCase() + x.slice(1))
+              .join('/')
+            : t.charAt(0).toUpperCase() + t.slice(1)
+          : t.toUpperCase())
         .join(' ');
     },
 
