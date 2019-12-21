@@ -1,6 +1,6 @@
 <template>
   <aside>
-    <Today />
+    <Today :timezone="timezone" />
     <AirQuality :latlon="latlon" />
   </aside>
 </template>
@@ -17,6 +17,10 @@ export default {
       type: Object,
       required: true,
     },
+    timezone: {
+      type: String,
+      required: true,
+    }
   },
 };
 </script>

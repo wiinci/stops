@@ -9,7 +9,10 @@
       </p>
       <ScheduleList :routes="routes" />
     </section>
-    <Sidebar :latlon="fields" />
+    <Sidebar
+      :latlon="fields"
+      :timezone="timezone"
+    />
   </div>
 </template>
 
@@ -36,6 +39,7 @@ export default {
       isLoading: true,
       routes: {},
       stops: [],
+      timezone: '',
     };
   },
   watch: {
@@ -130,8 +134,9 @@ export default {
         }, {});
 
       this.routes = Object.freeze(schedules);
-      this.isLoading = false;
       this.isEmpty = Object.keys(this.routes).length < 1;
+      this.isLoading = false;
+      this.timezone = this.stops[0].timezone;
       console.log(this.routes);
     },
   },
