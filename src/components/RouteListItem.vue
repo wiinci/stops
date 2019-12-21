@@ -10,7 +10,7 @@
       :datetime="route.arrivalTime"
       class="arrivalTime"
       :title="
-        getMinutes(route.arrivalTime, route.timeZone) === '< 1 min.' ? 'Less than a minute.' : `${getMinutes(route.arrivalTime)}`
+        getMinutes(route.arrivalTime, route.timeZone) === '< 1 min.' ? 'Arriving in less than a minute.' : `Arriving in ${getMinutes(route.arrivalTime, route.timeZone)}`
       "
     >{{ getMinutes(route.arrivalTime, route.timeZone) }}</time>
   </li>
