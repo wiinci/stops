@@ -7,8 +7,8 @@
  * @returns {Number}
  */
 
-export default function minutes(timeStr) {
-  const now = Date.now();
+export default function minutes(timeStr, timeZone) {
+  const now = Date.parse(new Date().toLocaleString('en-US', { timeZone }));
   const time = new Date();
   time.setHours(timeStr.split(':')[0]);
   time.setMinutes(timeStr.split(':')[1]);

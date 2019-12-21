@@ -88,6 +88,8 @@ export default {
         // Keep only required data
         .map(x => {
           const y = {};
+          const filtered = this.stops
+            .filter(z => z.onestop_id === x.origin_onestop_id);
           Object.assign(y, {
             // Arrival time at nearby stop
             arrivalTime: x.origin_arrival_time,
@@ -98,19 +100,23 @@ export default {
               .trim()
               .toUpperCase(),
             // Route name
-            routeName: this.stops
-              .filter(z => z.onestop_id === x.origin_onestop_id)
+            routeName: filtered
               .map(k => k.routes_serving_stop[0].route_name)
               .toString()
               .trim(),
             // Nearby stop name
-            stopName: this.stops
-              .filter(z => z.onestop_id === x.origin_onestop_id)
+            stopName: filtered
               .map(k => k.name)
               .toString()
               .replace('@', ' & ')
+              .replace('/', ' & ')
+              .replace(':', ' & ')
               .replace(/\s+/g, ' ')
               .trim(),
+            // Timezone
+            timeZone: x.origin_timezone,
+            vehicleTypes: filtered
+              .map(k => k.served_by_vehicle_types[0]),
           });
           return y;
         })

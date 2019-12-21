@@ -10,9 +10,9 @@
       :datetime="route.arrivalTime"
       class="arrivalTime"
       :title="
-        getMinutes(route.arrivalTime) === '< 1 min.' ? 'Less than a minute.' : `${getMinutes(route.arrivalTime)}`
+        getMinutes(route.arrivalTime, route.timeZone) === '< 1 min.' ? 'Less than a minute.' : `${getMinutes(route.arrivalTime)}`
       "
-    >{{ getMinutes(route.arrivalTime) }}</time>
+    >{{ getMinutes(route.arrivalTime, route.timeZone) }}</time>
   </li>
 </template>
 
@@ -32,8 +32,8 @@ export default {
     },
   },
   methods: {
-    getMinutes(timeStr) {
-      const mins = minutes(timeStr);
+    getMinutes(timeStr, timeZone) {
+      const mins = minutes(timeStr, timeZone);
       return mins <= 1 ? '< 1 min.' : `${mins} min.`;
     },
   },
