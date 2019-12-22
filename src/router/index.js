@@ -18,8 +18,8 @@ export default new Router({
     // },
     {
       path: '/',
-      name: 'Refactor',
-      component: () => import('@/components/Refactor'),
+      name: 'Start',
+      component: () => import('@/components/Start'),
     },
     {
       path: '/zip/:zip',
@@ -30,6 +30,18 @@ export default new Router({
       },
       props: {
         default: true,
+        // schedule: false,
+      },
+    },
+    {
+      path: '/gps',
+      name: 'Gps',
+      components: {
+        default: () => import('@/components/Location'),
+        // schedule: () => import('@/components/Schedule'),
+      },
+      props: {
+        default: false,
         // schedule: false,
       },
     },

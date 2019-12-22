@@ -19,8 +19,9 @@ export default {
   components: { Schedules },
   props: {
     zip: {
+      default: '',
+      required: false,
       type: String,
-      required: true,
     },
   },
   data() {
@@ -31,25 +32,37 @@ export default {
   computed: {
     isLoading() {
       return this.fields == null;
-    }
+    },
   },
   watch: {
     zip: {
       handler: 'getCoords',
       immediate: true,
-    }
+    },
   },
   methods: {
     async getCoords(zip) {
-      try {
-        const res = await api.getLatLonfromZip({ q: zip });
-        const fields = await res.records[0].fields;
-        this.fields = Object.freeze(fields);
-      } catch (err) {
-        const { message, name } = err;
-        throw new Error(`${name}: ${message}`);
+      const { name } = this.$route;
+      if (name === 'Zip') {
+        try {
+          const res = await api.getLatLonfromZip({ q: zip });
+          const fields = await res.records[0].fields;
+          this.fields = Object.freeze(fields);
+        } catch (err) {
+          const { message, value } = err;
+          throw new Error(`${value}: ${message}`);
+        }
+      } else if (name === 'Gps') {
+        // Use Geolocation API
+        const position = () => import('@/fn/position');
+        const location = await position().then(func => func.default());
+        const coords = await location;
+        this.fields = Object.freeze({
+          latitude: coords[0],
+          longitude: coords[1],
+        });
       }
-    }
-  }
+    },
+  },
 };
 </script>
