@@ -7,7 +7,7 @@
       <ul class="routes">
         <RouteListItem
           v-for="route in routes[index]"
-          :key="route.arrivalTime"
+          :key="`${route.stopName}-${route.arrivalTime}`"
           :route="route"
           :route-details="getHeadsignWithRoute(route.headsign, route.routeName)"
         />
