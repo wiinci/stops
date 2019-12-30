@@ -3,15 +3,14 @@
     <h1>Stops near me</h1>
     <form>
       <fieldset>
-        <legend>Find using zip code</legend>
+        <legend id="findZip">
+          Find using zip code
+        </legend>
         <div class="controls">
-          <label
-            for="zip"
-            class="hidden"
-          >Enter zip code</label>
           <input
             id="zip"
             v-model="zip"
+            aria-labelledby="findZip"
             name="zip"
             type="number"
           />
@@ -99,6 +98,7 @@ fieldset {
     margin-bottom: @base-unit * 5;
     outline: 0;
     padding: (@base-unit * 2);
+    width: 100%;
 
     &:focus,
     &:hover {
@@ -142,14 +142,5 @@ h1,
 .or {
   #type.h3();
   margin: (@base-unit * 7) auto;
-}
-
-.hidden {
-  position: absolute !important;
-    height: 1px;
-    width: 1px;
-    overflow: hidden;
-    clip: rect(1px, 1px, 1px, 1px);
-    white-space: nowrap;
 }
 </style>
