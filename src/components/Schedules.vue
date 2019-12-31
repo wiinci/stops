@@ -153,6 +153,7 @@ export default {
 
   @media only screen and (max-width: 640px) {
     display: block;
+    width: 90vw;
 
     > * + * {
       margin-top: (@base-unit * 5);
