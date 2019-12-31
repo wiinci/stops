@@ -27,8 +27,7 @@ export default new Router({
       components: {
         default: () => import(
           /* webpackChunkName: "location" */
-          /* webpackMode: "lazy" */
-          /* webpackPrefetch: true */
+          /* webpackPreload: true */
           '@/components/Location'
         ),
         // schedule: () => import('@/components/Schedule'),
@@ -44,8 +43,7 @@ export default new Router({
       components: {
         default: () => import(
           /* webpackChunkName: "location" */
-          /* webpackMode: "lazy" */
-          /* webpackPrefetch: true */
+          /* webpackPreload: true */
           '@/components/Location'
         ),
         // schedule: () => import('@/components/Schedule'),
