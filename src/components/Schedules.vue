@@ -144,9 +144,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import (reference) '../assets/styles/variables/global.less';
+
 .grid {
   display: grid;
   grid-gap: 4ch;
   grid-template-columns: 60ch 40ch;
+
+  @media only screen and (max-width: 640px) {
+    display: block;
+
+    > * + * {
+      margin-top: (@base-unit * 5);
+    }
+  }
 }
 </style>

@@ -72,6 +72,10 @@ export default {
 
 form {
   width: 40ch;
+
+  @media only screen and (max-width: 640px) {
+    width: 80vw;
+  }
 }
 
 h1 {
