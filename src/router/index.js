@@ -25,7 +25,12 @@ export default new Router({
       path: '/zip/:zip',
       name: 'Zip',
       components: {
-        default: () => import('@/components/Location'),
+        default: () => import(
+          /* webpackChunkName: "location" */
+          /* webpackMode: "lazy" */
+          /* webpackPrefetch: true */
+          '@/components/Location'
+        ),
         // schedule: () => import('@/components/Schedule'),
       },
       props: {
@@ -37,7 +42,12 @@ export default new Router({
       path: '/gps',
       name: 'Gps',
       components: {
-        default: () => import('@/components/Location'),
+        default: () => import(
+          /* webpackChunkName: "location" */
+          /* webpackMode: "lazy" */
+          /* webpackPrefetch: true */
+          '@/components/Location'
+        ),
         // schedule: () => import('@/components/Schedule'),
       },
       props: {
