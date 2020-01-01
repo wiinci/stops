@@ -94,9 +94,8 @@ fieldset {
     #type.h3();
     #type.monospace();
     background: transparent;
-    border-radius: @base-unit;
     border: 0 none;
-    box-shadow: 0 0 0 @base-unit #color.brand[blue];
+    border-bottom: @base-unit solid #color.brand[blue];
     color: #color.text[light];
     font-weight: 300;
     margin-bottom: @base-unit * 5;
@@ -106,7 +105,7 @@ fieldset {
 
     &:focus,
     &:hover {
-      box-shadow: 0 0 0 @base-unit darken(#color.brand[blue], 5%);
+      border-bottom: @base-unit solid darken(#color.brand[blue], 5%);
     }
   }
 }
@@ -124,10 +123,10 @@ button {
   #type.body();
   #type.monospace();
   background: #color.brand[blue];
-  border-radius: @base-unit;
+  border-radius: 2px;
   border: 0 none;
   box-shadow: 0 0 0 @base-unit #color.brand[blue];
-  color: contrast(#color.brand[blue], #color.text[dark], #color.text[light]);
+  color: contrast(#color.brand[blue], #color.text[dark], #color.text[light], 45%);
   padding: (@base-unit * 2) 0;
 
   &:active,
