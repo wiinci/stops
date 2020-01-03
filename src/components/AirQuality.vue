@@ -5,8 +5,8 @@
     </address>
     <dl>
       <div class="dl-row">
-        <dt>Current weather</dt>
-        <dd>{{ weather.sky }}</dd>
+        <dt>Weather</dt>
+        <dd>{{ weather.sky }} &middot; {{ weather.farenheit }}&deg;F / {{ weather.celsius }}&deg;C </dd>
       </div>
       <div class="dl-row">
         <dt>Air quality</dt>
@@ -16,12 +16,8 @@
           :class="aqiIndex.color"
           :title="'PM2.5 = ' + aqi.current.pollution.aqius"
         >
-          {{ aqiIndex.condition }}
+          {{ aqi.current.pollution.aqius }} &middot; {{ aqiIndex.condition }}
         </dd>
-      </div>
-      <div class="dl-row">
-        <dt>Temperature</dt>
-        <dd>{{ weather.farenheit }}&deg;F / {{ weather.celsius }}&deg;C</dd>
       </div>
       <div class="dl-row">
         <dt>Humidity</dt>
