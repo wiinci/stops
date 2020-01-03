@@ -1,21 +1,12 @@
-# marta-time
+# stops
 
-> MARTA bus and train arrival times for stations around you
+> Location-aware app to list transit stops within a 0.2 mile radius along with routes scheduled for those stops in the next 20 minutes.
 
-## Build Setup
+## Features
+- Search by zip code or by position
+- Active routes and arrival times
+- Weather and air quality data
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## APIs
+- Transitland: https://transit.land/documentation/datastore/api-endpoints.html
+- AirVisual: https://documenter.getpostman.com/view/507654/airvisual-api/2Fvvgg?version=latest
