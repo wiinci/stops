@@ -1,7 +1,7 @@
 {
-    "name": "marta-time",
+    "name": "stops",
     "version": "1.0.0",
-    "description": "MARTA bus and train arrival times for stations around you",
+    "description": "List transit stops within a 0.2 mile radius and operational routes for those stops in the next 20 minutes",
     "author": "Mardav Wala <mardav@gmail.com>",
     "private": true,
     "scripts": {
