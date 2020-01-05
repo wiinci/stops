@@ -149,7 +149,7 @@ export default {
 .grid {
   display: grid;
   grid-gap: 4ch;
-  grid-template-columns: 60ch 40ch;
+  grid-template-columns: 66ch 40ch;
 
   @media only screen and (max-width: 640px) {
     display: block;
