@@ -1,3 +1,7 @@
+🚨 Archived — transitioning to Transitland API v2 in a different repo
+
+---
+
 # stops
 
 > Location-aware app to list transit stops within a 0.2 mile radius along with routes scheduled for those stops in the next 20 minutes.
